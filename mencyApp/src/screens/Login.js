@@ -1,81 +1,91 @@
-import { View, Text, KeyboardAvoidingView, ScrollView, Image, Platform, TouchableOpacity } from "react-native";
+import { View, Text, KeyboardAvoidingView, ScrollView, Image, Platform, TouchableOpacity, Alert } from "react-native";
 import { Input } from '../components/input';
 import { useState } from "react";
 import { GoogleLogoIcon } from "phosphor-react-native";
-
+import { useNavigation } from "@react-navigation/native";
 
 export function Login(){
-
+ //=-=-=-=-=-=-=-=-=- COLOCAR ICON DO GOOGLE COM DARK MODE DEPOIS DE IMPLANTAR O DARK MODE -=-=-=-=-=-==-
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const navigation = useNavigation();
 
-    return(  
-        <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
-            <KeyboardAvoidingView 
-                className="flex-1"
-                behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
-            >
-                <ScrollView contentContainerStyle={{ padding: 5, alignItems:'center', }} className='flex'>
-                    <Image
-                        source={require("../../assets/images/logoVerde.png")}
-                        className="w-[40%] mt-[-50%]"
-                        resizeMode="contain"
-                    />
-                    <Text className="font-popSemibold text-[22px] text-preto dark:text-branco mt-[-70%] mb-[10%]">
-                        Login
-                    </Text>
 
-                    <View className='w-[350px] mt-[5%] items-center'>
-                        <Input 
-                            texto={'Email'} 
-                            value={email}
-                            onChangeText={(text) => setEmail(text.toLowerCase())}
-                            keyboardType="email-address"
-                        />
-                        
-                        <Input 
-                            texto={'Senha'} 
-                            seguranca={true}
-                            onChangeText={setSenha}
-                            value={senha}
-                        />
-                    </View>
+  const handleLogin = () => {
+    if (email === "admin@teste.com" && senha === "123456") {
+      navigation.navigate('Home');
+    } else {
+      Alert.alert("Acesso Negado", "Email ou senha incorretos.");
+    }
+  }
 
-                    <View className='w-[95%]'>
-                        <Text className="font-popLight text-[12px] text-preto dark:text-branco mt-[-5%] mb-[10%]"
-                        onPress={() => navigation.navigate('EsqueciSenha')}>
-                        Esqueci minha senha
-                        </Text>
-                    </View>
+  return(  
+      <View className="flex-1 items-center bg-branco dark:bg-preto-dark">
+          <KeyboardAvoidingView 
+              className="flex-1"
+              behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+          >
+              <ScrollView contentContainerStyle={{ padding: 5, alignItems:'center', }} className='flex'>
+                  <Image
+                      source={require("../../assets/images/logoVerde.png")}
+                      className="w-[40%] mt-[-50%]"
+                      resizeMode="contain"
+                  />
+                  <Text className="font-popSemibold text-[22px] text-preto dark:text-branco mt-[-70%] mb-[10%]">
+                      Login
+                  </Text>
 
-                    <TouchableOpacity 
-                        className="px-16 bg-amarelo w-[70%] rounded-[15px] items-center justify-center mt-2 py-2 mt-2"
-                        onPress={() => ('')}
-                        activeOpacity={0.8}
-                    >
-                        <Text className="text-branco font-popRegular text-[18px]">
-                        Entrar
-                        </Text>
-                    </TouchableOpacity>
-                    
-                    <View className='flex-row items-center mt-[10%] gap-3'>
-                        <View className='h-[1px] w-[15%] bg-preto dark:bg-branco' />
-                        <Text className='font-popLight text-preto dark:text-branco'>ou</Text>
-                        <View className='h-[1px] w-[15%] bg-preto dark:bg-branco' />
-                    </View>
+                  <View className='w-[350px] mt-[5%] items-center'>
+                      <Input 
+                          texto={'Email'} 
+                          value={email}
+                          onChangeText={(text) => setEmail(text.toLowerCase())}
+                          keyboardType="email-address"
+                      />
+                      
+                      <Input 
+                          texto={'Senha'} 
+                          seguranca={true}
+                          onChangeText={setSenha}
+                          value={senha}
+                      />
+                  </View>
 
-                    <TouchableOpacity
-                        className='flex-row justify-center border bg-transparent rounded-xl gap-2 p-1 mt-[10%]'
-                    >
-                        <GoogleLogoIcon weight="regular" size={25}/>
-                        <Text className='font-popRegular text-[18px]'>Acesse pelo Google</Text>
-                    </TouchableOpacity>
+                  <View className='w-[95%]'>
+                      <Text className="font-popLight text-[12px] text-preto dark:text-branco mt-[-5%] mb-[10%]"
+                      onPress={() => navigation.navigate('EsqueciSenha')}>
+                      Esqueci minha senha
+                      </Text>
+                  </View>
 
-                    <Text className='font-popLight text-[13px] mt-[15%] text-preto dark:text-branco' onPress={() => navigation.navigate('Cadastro')}>
-                        Faça o cadastro clicando <Text className='text-amarelo' onPress={() => navigation.navigate('Cadastro')}>aqui</Text>
-                    </Text>
-                </ScrollView>
-            </KeyboardAvoidingView>
-        </View>
-    )
+                  <TouchableOpacity 
+                      className="px-16 bg-amarelo w-[70%] rounded-[15px] items-center justify-center mt-2 py-2"
+                      onPress={handleLogin}
+                      activeOpacity={0.8}
+                  >
+                      <Text className="text-branco font-popRegular text-[18px]">
+                      Entrar
+                      </Text>
+                  </TouchableOpacity>
+                  
+                  <View className='flex-row items-center mt-[10%] gap-3'>
+                      <View className='h-[1px] w-[15%] bg-preto dark:bg-branco' />
+                      <Text className='font-popLight text-preto dark:text-branco'>ou</Text>
+                      <View className='h-[1px] w-[15%] bg-preto dark:bg-branco' />
+                  </View>
+
+                  <TouchableOpacity
+                      className='flex-row justify-center border bg-transparent rounded-xl gap-2 p-1 mt-[10%] border-preto dark:border-branco'
+                  >
+                      <GoogleLogoIcon weight="regular" size={25} color="#000" />
+                      <Text className='font-popRegular text-[18px] text-preto dark:text-branco'>Acesse pelo Google</Text>
+                  </TouchableOpacity>
+
+                  <Text className='font-popLight text-[13px] mt-[15%] text-preto dark:text-branco' onPress={() => navigation.navigate('Cadastro')}>
+                      Faça o cadastro clicando <Text className='text-amarelo' onPress={() => navigation.navigate('Cadastro')}>aqui</Text>
+                  </Text>
+              </ScrollView>
+          </KeyboardAvoidingView>
+      </View>
+  )
 }
