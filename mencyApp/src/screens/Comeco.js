@@ -17,7 +17,7 @@ export function Comeco({ navigation }) {
       
       <Image 
         source={require('../../assets/images/logoBranco.png')} 
-        className="w-[60%]"
+        className="w-[40%]"
         resizeMode="contain"
       />
 
