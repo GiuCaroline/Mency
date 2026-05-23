@@ -27,7 +27,7 @@ export function Login(){
           >
               <ScrollView contentContainerStyle={{ padding: 5, alignItems:'center', }} className='flex'>
                   <Image
-                      source={require("../../assets/images/logoVerde.png")}
+                      source={require("../../assets/images/logoAmarela.png")}
                       className="w-[40%] mt-[-50%]"
                       resizeMode="contain"
                   />

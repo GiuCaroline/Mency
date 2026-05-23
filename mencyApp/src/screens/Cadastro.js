@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export function Cadastro(){
     const [nome, setNome] = useState("");
+    const [cpf, setCpf] = useState("");
     const [telefone, setTelefone] = useState("");
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
@@ -23,7 +24,7 @@ export function Cadastro(){
             >
                 <ScrollView contentContainerStyle={{ padding: 5, alignItems:'center', }} className='flex'>
                     <Image
-                        source={require("../../assets/images/logoVerde.png")}
+                        source={require("../../assets/images/logoAmarela.png")}
                         className="w-[30%] mt-[-50%]"
                         resizeMode="contain"
                     />
@@ -39,9 +40,16 @@ export function Cadastro(){
                         />
 
                         <Input 
+                            texto={'CPF'} 
+                            value={cpf}
+                            onChangeText={(text) => setCpf(maskCPF(text))}
+                        />
+
+                        <Input 
                             texto={'Telefone'} 
                             value={telefone}
                             onChangeText={(text) => setTelefone(maskPhone(text))}
+                            keyboardType="number-pad"
                         />
 
                         <Input 
@@ -59,7 +67,7 @@ export function Cadastro(){
                                 value={senha}
                             />
                             <TouchableOpacity 
-                                className="absolute right-10 top-[32px] z-10" 
+                                className="absolute right-5 top-[40px] z-10" 
                                 onPress={() => setMostrarSenha(!mostrarSenha)}
                             >
                                 {mostrarSenha ? (
@@ -107,5 +115,20 @@ function maskPhone(value) {
     v = v.slice(0, 10) + "-" + v.slice(10, 14);
   }
 
+  return v;
+}
+
+
+function maskCPF(value) {
+  if (!value) return "";
+  
+  let v = value.replace(/\D/g, "");
+  
+  v = v.slice(0, 11);
+  
+  v = v.replace(/(\d{3})(\d)/, "$1.$2");
+  v = v.replace(/(\d{3})(\d)/, "$1.$2");
+  v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  
   return v;
 }
