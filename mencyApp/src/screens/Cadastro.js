@@ -46,13 +46,6 @@ export function Cadastro(){
                         />
 
                         <Input 
-                            texto={'Telefone'} 
-                            value={telefone}
-                            onChangeText={(text) => setTelefone(maskPhone(text))}
-                            keyboardType="number-pad"
-                        />
-
-                        <Input 
                             texto={'Email'} 
                             value={email}
                             onChangeText={(text) => setEmail(text.toLowerCase())}

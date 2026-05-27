@@ -5,7 +5,7 @@ import { Search } from './search'
 import { Notificacao } from './notification'
 
 export function Nav({ titulo, onSearch, placeholder }){
-  const usuario = {id: 1, nome: 'Roberto Carlos da Silva Júnior Oliveira'};
+  const usuario = {id: 1, nome: 'Carlos Alberto da Silva Júnior Oliveira'};
 
   function formataNome(nome) {
     const partes = nome.trim().split(" ");
