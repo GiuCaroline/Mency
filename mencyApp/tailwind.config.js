@@ -22,6 +22,7 @@ module.exports = {
           DEFAULT: '#EDEDED',
           dark: '',
         },
+        vermelho: '#A4000D'
       },
     }
   },

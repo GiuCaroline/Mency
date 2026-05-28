@@ -32,7 +32,7 @@ export function Notificacao() {
                 <BellIcon size={26} color="#000" />
                 
                 {temNaoLida && (
-                    <View className="absolute top-[6px] right-[8px] w-[12px] h-[12px] bg-[#A4000D] rounded-full border border-white" />
+                    <View className="absolute top-[6px] right-[8px] w-[12px] h-[12px] bg-vermelho rounded-full border border-input" />
                 )}
             </TouchableOpacity>
 

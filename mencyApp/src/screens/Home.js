@@ -2,7 +2,7 @@ import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Animated } from "
 import { Nav } from "../components/nav";
 import { NavBottom } from "../components/navBottom";
 import { LinearGradient } from 'expo-linear-gradient';
-import { Eye, EyeSlash, Info, WarningCircle } from 'phosphor-react-native';
+import { Eye, EyeSlash, WarningCircle } from 'phosphor-react-native';
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { IconeDinamico } from '../components/iconeDinamico';
@@ -482,13 +482,13 @@ export function Home() {
                 <Text className='font-popMedium text-[14px] text-preto dark:text-branco'>Previsão de saldo</Text>
               </View>
               <Text className='font-popRegular text-[9px] text-[#9C9999] mb-2'>Considerando parcelas futuras</Text>
-              <Text className='font-popMedium text-[20px] text-[#A4000D]'>
+              <Text className='font-popMedium text-[20px] text-vermelho'>
                 -R$ {formataDinheiro(Math.abs(dadosDashboardAdicionais.previsao.saldo))}
               </Text>
               
               <View className='bg-[#FCE8E6] dark:bg-[#5C2B29] p-2 rounded-[8px] mt-3 flex-row items-center gap-2'>
                 <WarningCircle size={14} color="#A4000D" weight="fill" />
-                <Text className='font-popRegular text-[9px] text-[#A4000D] dark:text-[#F28B82] flex-1 leading-tight'>
+                <Text className='font-popRegular text-[9px] text-vermelho dark:text-[#F28B82] flex-1 leading-tight'>
                   Seu saldo pode ficar negativo dia {dadosDashboardAdicionais.previsao.dataAviso}
                 </Text>
               </View>
