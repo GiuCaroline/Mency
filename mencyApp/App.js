@@ -12,8 +12,9 @@ import { useFonts,
 
 import { Comeco } from './src/screens/Comeco';
 import { Login } from './src/screens/Login';
-import { Home } from './src/screens/Home';
 import { Cadastro } from './src/screens/Cadastro';
+import { Home } from './src/screens/Home';
+import { Transacao } from './src/screens/Transacao';
 
 
 
@@ -54,8 +55,9 @@ function AppContent() {
         <Stack.Screen name="Splash" component={Comeco} />
         <Stack.Screen name="Comeco" component={Comeco} />
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Cadastro" component={Cadastro} />
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Transacao" component={Transacao} />
       </Stack.Navigator>
 
       <StatusBar />
