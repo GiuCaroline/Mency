@@ -133,7 +133,7 @@ export function Home() {
   const conta = { id: 1, saldo: '1000000.5' };
   
   const pags = [
-    { id: 1, dataProg: '2026-06-05', valor: '20.40', nome: 'Youtube Premium' },
+    { id: 1, dataProg: '2026-05-28', valor: '20.40', nome: 'Youtube Premium' },
     { id: 2, dataProg: '2026-06-11', valor: '60.0', nome: 'Discord - Nitro' },
     { id: 3, dataProg: '2026-08-05', valor: '10.99', nome: 'Google Photos' }
   ];
@@ -304,17 +304,63 @@ export function Home() {
             {proximosPagamentos.length > 0 ? (
                 proximosPagamentos.map((pag) => (
                 <View key={pag.id} className='flex-col bg-input p-4 w-[45%] py-6 rounded-[20px]' style={[styles.sombra]}>
-                    <View className='bg-branco rounded-full p-2 items-center w-[40px]'>
-                    <IconeDinamico nome={pag.nome} />
-                    </View>
-                    <Text className='font-popMedium mt-[3%] text-[15px] text-preto'>{pag.nome}</Text>
-                    <Text className='font-popMedium text-[15px] text-preto mt-[2%]'>
+                  <View className='bg-branco rounded-full p-2 items-center w-[40px]'>
+                    <IconeDinamico nome={pag.nome} cor={calcularDias(pag.dataProg) == 4
+                      ? coresPadroes[4]
+                      : calcularDias(pag.dataProg) == 3
+                      ? coresPadroes[3]
+                      : calcularDias(pag.dataProg) == 2
+                      ? coresPadroes[2]
+                      : calcularDias(pag.dataProg) == 1
+                      ? coresPadroes[1]
+                      : calcularDias(pag.dataProg) == 0
+                      ? coresPadroes[0]
+                      : undefined}/>
+                  </View>
+                  <Text className='font-popMedium mt-[3%] text-[15px]' style={{
+                    color: calcularDias(pag.dataProg) == 4
+                      ? coresPadroes[4]
+                      : calcularDias(pag.dataProg) == 3
+                      ? coresPadroes[3]
+                      : calcularDias(pag.dataProg) == 2
+                      ? coresPadroes[2]
+                      : calcularDias(pag.dataProg) == 1
+                      ? coresPadroes[1]
+                      : calcularDias(pag.dataProg) == 0
+                      ? coresPadroes[0]
+                      : 'text-preto'
+                  }}>{pag.nome}</Text>
+                  <Text className='font-popMedium text-[15px] mt-[2%]' style={{
+                    color: calcularDias(pag.dataProg) == 4
+                      ? coresPadroes[4]
+                      : calcularDias(pag.dataProg) == 3
+                      ? coresPadroes[3]
+                      : calcularDias(pag.dataProg) == 2
+                      ? coresPadroes[2]
+                      : calcularDias(pag.dataProg) == 1
+                      ? coresPadroes[1]
+                      : calcularDias(pag.dataProg) == 0
+                      ? coresPadroes[0]
+                      : 'text-preto'
+                  }}>
                     ${formataDinheiro(pag.valor)}
                     <Text className='font-popRegular text-[11px]'>/mês</Text>
-                    </Text>
-                    <Text className='font-popRegular text-[13px] mt-[2%]'>
+                  </Text>
+                  <Text className='font-popRegular text-[13px] mt-[2%]'  style={{
+                    color: calcularDias(pag.dataProg) == 4
+                      ? coresPadroes[4]
+                      : calcularDias(pag.dataProg) == 3
+                      ? coresPadroes[3]
+                      : calcularDias(pag.dataProg) == 2
+                      ? coresPadroes[2]
+                      : calcularDias(pag.dataProg) == 1
+                      ? coresPadroes[1]
+                      : calcularDias(pag.dataProg) == 0
+                      ? coresPadroes[0]
+                      : 'text-preto'
+                  }}>
                     Daqui {calcularDias(pag.dataProg)} dias
-                    </Text>
+                  </Text>
                 </View>
                 ))
             ) : (
@@ -463,7 +509,7 @@ export function Home() {
               <View className='flex-row justify-between items-center mb-2'>
                 <Text className='font-popMedium text-[14px] text-preto dark:text-branco'>Sobras mensais</Text>
               </View>
-              <Text className='font-popMedium text-[20px] text-[#34A853] mt-1'>
+              <Text className='font-popMedium text-[20px] text-[#E8B635] mt-1'>
                 R$ {formataDinheiro(dadosDashboardAdicionais.sobras.atual)}
               </Text>
               
@@ -471,7 +517,7 @@ export function Home() {
 
               <View className='mt-3'>
                 <Text className='font-popRegular text-[10px] text-[#9C9999] mb-1'>Média dos últimos 6 meses</Text>
-                <Text className='font-popMedium text-[13px] text-[#34A853]'>
+                <Text className='font-popMedium text-[13px] text-[#E8B635]'>
                   R$ {formataDinheiro(dadosDashboardAdicionais.sobras.media6Meses)}
                 </Text>
               </View>
@@ -482,13 +528,13 @@ export function Home() {
                 <Text className='font-popMedium text-[14px] text-preto dark:text-branco'>Previsão de saldo</Text>
               </View>
               <Text className='font-popRegular text-[9px] text-[#9C9999] mb-2'>Considerando parcelas futuras</Text>
-              <Text className='font-popMedium text-[20px] text-vermelho'>
+              <Text className='font-popMedium text-[20px] text-[#8D6409]'>
                 -R$ {formataDinheiro(Math.abs(dadosDashboardAdicionais.previsao.saldo))}
               </Text>
               
-              <View className='bg-[#FCE8E6] dark:bg-[#5C2B29] p-2 rounded-[8px] mt-3 flex-row items-center gap-2'>
-                <WarningCircle size={14} color="#A4000D" weight="fill" />
-                <Text className='font-popRegular text-[9px] text-vermelho dark:text-[#F28B82] flex-1 leading-tight'>
+              <View className='bg-[#8D6409] dark:bg-[#5C2B29] p-2 rounded-[8px] mt-3 flex-row items-center gap-2'>
+                <WarningCircle size={14} color="#ffd66e" weight="fill" />
+                <Text className='font-popRegular text-[9px] text-[#ffd66e] dark:text-[#F28B82] flex-1 leading-tight'>
                   Seu saldo pode ficar negativo dia {dadosDashboardAdicionais.previsao.dataAviso}
                 </Text>
               </View>
