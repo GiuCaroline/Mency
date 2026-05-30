@@ -5,11 +5,20 @@ import { Eye, EyeSlash } from 'phosphor-react-native';
 import { NavBottom } from '../components/navBottom';
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import { IconeDinamico } from '../components/iconeDinamico'
 
 export function Transacao() {
     const conta = { id: 1, saldo: '1000000.5' };
     const [mostrarValor, setMostrarValor] = useState(false);
     const navigation = useNavigation();
+
+    const pags = [
+        { id: 1, dataProg: '2026-05-28', valor: '20.40', nome: 'Youtube Premium' },
+        { id: 2, dataProg: '2026-06-11', valor: '60.0', nome: 'Discord - Nitro' },
+        { id: 3, dataProg: '2026-08-05', valor: '10.99', nome: 'Google Photos' }
+    ];
+
+
     return(
         <View className='flex-1 bg-branco dark:bg-preto-dark'>
             <ScrollView contentContainerStyle={{ padding: 10, paddingBottom: 95 }} className='flex'>
@@ -29,26 +38,31 @@ export function Transacao() {
                             style={{ borderRadius: 20 }}
                         >
                             <View className="z-20">
-                            <Text className="text-preto font-popRegular text-[14px]">
-                                Saldo atual
-                            </Text>
-                            <Text className="mt-[-3%] text-preto font-popRegular text-[22px]">
-                                R$ {mostrarValor ? formataDinheiro(conta.saldo) : '••••••'}
-                            </Text>
+                                <Text className="text-preto font-popRegular text-[14px]">
+                                    Saldo atual
+                                </Text>
+                                <Text className="mt-[-3%] text-preto font-popRegular text-[22px]">
+                                    R$ {mostrarValor ? formataDinheiro(conta.saldo) : '••••••'}
+                                </Text>
                             </View>
                             <TouchableOpacity
                             className='bg-branco dark:bg-preto-dark rounded-full p-2'
                             onPress={() => setMostrarValor(!mostrarValor)}
                             >
-                            {mostrarValor ? (
-                                <Eye size={24} color="#000" />
-                            ) : (
-                                <EyeSlash size={24} color="#000" />
-                            )}
+                                {mostrarValor ? (
+                                    <Eye size={24} color="#000" />
+                                ) : (
+                                    <EyeSlash size={24} color="#000" />
+                                )}
                             </TouchableOpacity>
                         </LinearGradient>
                     </View>
                     
+                    {trasacoes}
+                    <View>
+                        <IconeDinamico nome={pags.nome[0]} />
+                    </View>
+
                 </View>
             </ScrollView>
             <NavBottom
