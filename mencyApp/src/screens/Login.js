@@ -12,7 +12,7 @@ export function Login(){
 
 
   const handleLogin = () => {
-    if (email === "admin@teste.com" && senha === "123456") {
+    if (email === "" && senha === "") {
       navigation.navigate('Home');
     } else {
       Alert.alert("Acesso Negado", "Email ou senha incorretos.");

@@ -15,6 +15,7 @@ import { Login } from './src/screens/Login';
 import { Cadastro } from './src/screens/Cadastro';
 import { Home } from './src/screens/Home';
 import { Transacao } from './src/screens/Transacao';
+import { Futuro } from './src/screens/Futuro';
 
 
 
@@ -58,6 +59,7 @@ function AppContent() {
         <Stack.Screen name="Cadastro" component={Cadastro} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Transacao" component={Transacao} />
+        <Stack.Screen name="Futuro" component={Futuro} />
       </Stack.Navigator>
 
       <StatusBar />

@@ -133,7 +133,7 @@ export function Home() {
   const conta = { id: 1, saldo: '1000000.5' };
   
   const pags = [
-    { id: 1, dataProg: '2026-05-28', valor: '20.40', nome: 'Youtube Premium' },
+    { id: 1, dataProg: '2026-06-05', valor: '20.40', nome: 'Youtube Premium' },
     { id: 2, dataProg: '2026-06-11', valor: '60.0', nome: 'Discord - Nitro' },
     { id: 3, dataProg: '2026-08-05', valor: '10.99', nome: 'Google Photos' }
   ];
