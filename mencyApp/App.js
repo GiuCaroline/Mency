@@ -16,6 +16,7 @@ import { Cadastro } from './src/screens/Cadastro';
 import { Home } from './src/screens/Home';
 import { Transacao } from './src/screens/Transacao';
 import { Futuro } from './src/screens/Futuro';
+import { Perfil } from './src/screens/Perfil';
 
 
 
@@ -60,6 +61,7 @@ function AppContent() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Transacao" component={Transacao} />
         <Stack.Screen name="Futuro" component={Futuro} />
+        <Stack.Screen name="Perfil" component={Perfil} />
       </Stack.Navigator>
 
       <StatusBar />

@@ -66,7 +66,7 @@ export function Transacao() {
                     </View>
                     
                     {transacoesFiltradas.map((item) => (
-                        <View key={item.id} className='bg-input flex-row items-center justify-between py-4 px-5 mt-[2%] w-full rounded-[20px]'>
+                        <View style={[styles.sombra]} key={item.id} className='bg-input flex-row items-center justify-between py-4 px-5 mt-[4%] w-full rounded-[20px]'>
                             <View className='flex-row items-center'> 
                                 <View className='bg-branco rounded-full p-2'>
                                     <IconeDinamico nome={item.nome} tamanho={30} />
@@ -76,7 +76,7 @@ export function Transacao() {
                                     <Text className='font-popRegular text-preto text-[14px]'>{formataData(item.dataProg)}</Text>
                                 </View>
                             </View>
-                            <Text className={`font-popRegular text-[16px] ${item.tipo === 'entrada' ? 'text-[#006A1D]' : 'text-[#FF3B30]'}`}>
+                            <Text className={`font-popRegular text-[16px] ${item.tipo === 'entrada' ? 'text-[#006A1D]' : 'text-[#A4000D]'}`}>
                                 {item.tipo === 'entrada' ? '+' : '-'}R$ {formataDinheiro(item.valor)}
                             </Text>
                         </View>

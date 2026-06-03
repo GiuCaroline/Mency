@@ -257,7 +257,7 @@ export function Home() {
 
   return (
     <View className='flex-1 bg-branco dark:bg-preto-dark'>
-      <ScrollView contentContainerStyle={{ padding: 10, paddingBottom: 95 }} className='flex'>
+      <ScrollView contentContainerStyle={{ padding: 10, paddingBottom: 110 }} className='flex'>
         <Nav 
           placeholder="Buscar pagamentos..." 
           onSearch={(textoDigitado) => setTermoBusca(textoDigitado)}
