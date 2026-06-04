@@ -227,19 +227,35 @@ export function Futuro() {
                                          {calcularDias(event.dataProg)} dias
                                         </Text>
                                     </View>
-                                    <Text className='font-popRegular text-[14px]' style={{
-                                        color: calcularDias(event.dataProg) == 4
-                                        ? coresPadroes[4]
-                                        : calcularDias(event.dataProg) == 3
-                                        ? coresPadroes[3]
-                                        : calcularDias(event.dataProg) == 2
-                                        ? coresPadroes[2]
-                                        : calcularDias(event.dataProg) == 1
-                                        ? coresPadroes[1]
-                                        : calcularDias(event.dataProg) == 0
-                                        ? coresPadroes[0]
-                                        : 'text-preto'
-                                    }}>{formataData(event.dataProg)}</Text>
+                                    <View className='flex-row justify-between w-[92%]'>
+                                        <Text className='font-popRegular text-[14px]' style={{
+                                            color: calcularDias(event.dataProg) == 4
+                                            ? coresPadroes[4]
+                                            : calcularDias(event.dataProg) == 3
+                                            ? coresPadroes[3]
+                                            : calcularDias(event.dataProg) == 2
+                                            ? coresPadroes[2]
+                                            : calcularDias(event.dataProg) == 1
+                                            ? coresPadroes[1]
+                                            : calcularDias(event.dataProg) == 0
+                                            ? coresPadroes[0]
+                                            : 'text-preto'
+                                        }}>R${formataDinheiro(event.valor)}</Text>
+                                        
+                                        <Text className='font-popRegular text-[14px]' style={{
+                                            color: calcularDias(event.dataProg) == 4
+                                            ? coresPadroes[4]
+                                            : calcularDias(event.dataProg) == 3
+                                            ? coresPadroes[3]
+                                            : calcularDias(event.dataProg) == 2
+                                            ? coresPadroes[2]
+                                            : calcularDias(event.dataProg) == 1
+                                            ? coresPadroes[1]
+                                            : calcularDias(event.dataProg) == 0
+                                            ? coresPadroes[0]
+                                            : 'text-preto'
+                                        }}>{formataData(event.dataProg)}</Text>
+                                    </View>
                                 </View>
                             </View>
                             <View className='flex-1 ml-[3%]'>
@@ -281,3 +297,16 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
 });
+
+function formataDinheiro(value) {
+  const numero = typeof value === 'string' ? parseFloat(value) : value;
+  
+  if (isNaN(numero)) {
+    return "0,00";
+  }
+
+  return numero.toLocaleString('pt-BR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
