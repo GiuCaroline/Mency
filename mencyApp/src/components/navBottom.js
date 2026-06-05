@@ -6,6 +6,7 @@ import {
   User,
 } from "phosphor-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useColorScheme } from "nativewind";
 
 export function NavBottom({ active, onChange }) {
   const insets = useSafeAreaInsets();
@@ -13,7 +14,7 @@ export function NavBottom({ active, onChange }) {
   return (
     <View
       style={[{ paddingBottom: insets.bottom > 0 ? insets.bottom : 8 }]}
-      className="absolute bottom-0 w-full bg-input dark:bg-preto-dark flex-row justify-around py-[3%] items-center"
+      className="absolute bottom-0 w-full bg-input dark:bg-input-dark flex-row justify-around py-[3%] items-center"
     >
       <Tab
         label="Home"
@@ -48,12 +49,14 @@ export function NavBottom({ active, onChange }) {
 }
 
 function Tab({ label, icon: Icon, active, onPress }) {
+  const { colorScheme, toggleColorScheme } = useColorScheme();
+  const cor = colorScheme == 'dark' ? '#FAFAFA' : '#000';
   return (
     <Pressable className="items-center justify-center" onPress={onPress}>
 
       <Icon
         size={24}
-        color={active ? "#C19200" : "#313131"}
+        color={active ? "#C19200" : cor}
       />
 
       <Text className={`text-[11px] ${active ? "text-amarelo" : "text-[#313131]"} dark:text-branco font-popRegular`}>

@@ -12,7 +12,7 @@ export function Input({
     <View
       className="w-full mb-[10%]"
     >
-      <Text className='text-left font-popRegular text-[15px]'>{texto}</Text>
+      <Text className='text-left font-popRegular text-preto dark:text-branco text-[15px]'>{texto}</Text>
       
       <TextInput
         className={`px-[3%] w-full text-[16px] text-preto dark:text-branco bg-input dark:bg-input-dark rounded-xl flex items-center justify-center h-[50px] ${!seguranca ? 'font-popRegular' : ''}`}

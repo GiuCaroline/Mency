@@ -20,7 +20,7 @@ module.exports = {
         },
         'input': {
           DEFAULT: '#EDEDED',
-          dark: '',
+          dark: '#212124',
         },
         vermelho: '#A4000D'
       },

@@ -3,6 +3,7 @@ import { Input } from '../components/input';
 import { useState } from "react";
 import { GoogleLogoIcon, Eye, EyeSlash } from "phosphor-react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useColorScheme } from "nativewind";
 
 export function Cadastro(){
     const [nome, setNome] = useState("");
@@ -12,6 +13,10 @@ export function Cadastro(){
     const [senha, setSenha] = useState("");
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const navigation = useNavigation();
+
+    
+    const { colorScheme, toggleColorScheme } = useColorScheme();
+    const cor = colorScheme == 'dark' ? '#FAFAFA' : '#000';
 
     const handleCadastro = () => {
     }
@@ -64,9 +69,9 @@ export function Cadastro(){
                                 onPress={() => setMostrarSenha(!mostrarSenha)}
                             >
                                 {mostrarSenha ? (
-                                    <Eye size={24} color="#000" />
+                                    <Eye size={24} color={cor} />
                                 ) : (
-                                    <EyeSlash size={24} color="#000" />
+                                    <EyeSlash size={24} color={cor} />
                                 )}
                             </TouchableOpacity>
                         </View>

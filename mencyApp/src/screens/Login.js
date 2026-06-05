@@ -3,13 +3,15 @@ import { Input } from '../components/input';
 import { useState } from "react";
 import { GoogleLogoIcon } from "phosphor-react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useColorScheme } from "nativewind";
 
 export function Login(){
- //=-=-=-=-=-=-=-=-=- COLOCAR ICON DO GOOGLE COM DARK MODE DEPOIS DE IMPLANTAR O DARK MODE -=-=-=-=-=-==-
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const navigation = useNavigation();
 
+  const { colorScheme, toggleColorScheme } = useColorScheme();
+  const cor = colorScheme == 'dark' ? '#FAFAFA' : '#000';
 
   const handleLogin = () => {
     if (email === "" && senha === "") {
@@ -77,7 +79,7 @@ export function Login(){
                   <TouchableOpacity
                       className='flex-row justify-center border bg-transparent rounded-xl gap-2 p-1 mt-[10%] border-preto dark:border-branco'
                   >
-                      <GoogleLogoIcon weight="regular" size={25} color="#000" />
+                      <GoogleLogoIcon weight="regular" size={25} color={cor} />
                       <Text className='font-popRegular text-[18px] text-preto dark:text-branco'>Acesse pelo Google</Text>
                   </TouchableOpacity>
 

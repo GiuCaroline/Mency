@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { View, TouchableOpacity, TextInput, Animated, StyleSheet, Dimensions } from "react-native";
 import { MagnifyingGlassIcon, X } from "phosphor-react-native";
+import { useColorScheme } from "nativewind";
 
 const { width } = Dimensions.get("window");
 
@@ -8,6 +9,9 @@ export function Search({ onSearch, placeholder = "Pesquisar..." }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [text, setText] = useState("");
     const widthAnim = useRef(new Animated.Value(42)).current;
+    
+    const { colorScheme, toggleColorScheme } = useColorScheme();
+    const cor = colorScheme == 'dark' ? '#FAFAFA' : '#000';
 
     const toggleSearch = () => {
         if (isExpanded) {
@@ -39,14 +43,14 @@ export function Search({ onSearch, placeholder = "Pesquisar..." }) {
                         right: 0,
                     }
                 ]}
-                className="bg-input rounded-full flex-row items-center h-[42px]"
+                className="bg-input dark:bg-input-dark rounded-full flex-row items-center h-[42px]"
             >
                 <TouchableOpacity
                     className="p-2"
                     activeOpacity={0.8}
                     onPress={toggleSearch}
                 >
-                    <MagnifyingGlassIcon size={26} color="#000" />
+                    <MagnifyingGlassIcon size={26} color={cor} />
                 </TouchableOpacity>
 
                 {isExpanded && (

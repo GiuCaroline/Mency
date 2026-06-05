@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import { BellIcon } from "phosphor-react-native";
+import { useColorScheme } from "nativewind";
 
 export function Notificacao() {
     const [isOpen, setIsOpen] = useState(false);
     
+    const { colorScheme, toggleColorScheme } = useColorScheme();
+    const cor = colorScheme == 'dark' ? '#FAFAFA' : '#000';
+
     const [notificacoes, setNotificacoes] = useState([
         { id: 1, titulo: "Nova transferência", msg: "Você recebeu R$ 50,00", lida: false },
         { id: 2, titulo: "Lembrete", msg: "Vencimento da fatura amanhã", lida: false },
@@ -24,25 +28,25 @@ export function Notificacao() {
     return (
         <View className="relative z-50">
             <TouchableOpacity 
-                className="bg-input rounded-full p-2 z-50 relative" 
+                className="bg-input dark:bg-input-dark rounded-full p-2 z-50 relative" 
                 style={[styles.sombra]}
                 activeOpacity={0.8}
                 onPress={toggleNotificacao}
             >
-                <BellIcon size={26} color="#000" />
+                <BellIcon size={26} color={cor} />
                 
                 {temNaoLida && (
-                    <View className="absolute top-[6px] right-[8px] w-[12px] h-[12px] bg-vermelho rounded-full border border-input" />
+                    <View className="absolute top-[6px] right-[8px] w-[12px] h-[12px] bg-vermelho rounded-full border border-input dark:border-input-dark" />
                 )}
             </TouchableOpacity>
 
             {isOpen && (
                 <View 
-                    className="absolute top-[55px] right-0 w-[250px] bg-white dark:bg-preto dark:border dark:border-branco rounded-xl p-4 z-40"
+                    className="absolute top-[55px] right-0 w-[250px] bg-white dark:bg-preto  rounded-xl p-4 z-40"
                     style={[styles.sombraPopup]}
                 >
                     <View 
-                        className="absolute -top-2 right-[14px] w-4 h-4 bg-white rotate-45"
+                        className="absolute -top-2 right-[14px] w-4 h-4 bg-white dark:bg-preto rotate-45"
                     />
 
                     <Text className="font-popMedium text-[18px] text-preto dark:text-branco mb-3">

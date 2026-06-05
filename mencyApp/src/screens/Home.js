@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { IconeDinamico } from '../components/iconeDinamico';
 import { DropdownMeses } from '../components/dropdown';
 import Svg, { Path, G, Circle, Line, Text as SvgText } from 'react-native-svg';
+import { useColorScheme } from "nativewind";
 
 const AnimatedG = Animated.createAnimatedComponent(G);
 
@@ -130,6 +131,11 @@ function FatiaAnimada({ isElevada, anguloMeio, cor, caminho }) {
 }
 
 export function Home() {
+  const { colorScheme, toggleColorScheme } = useColorScheme();
+  const cor = colorScheme == 'dark' ? '#FAFAFA' : '#000';
+  const primeiraCor = colorScheme == 'light' ? '#FAFAFA' : '#121212';
+  const segundaCor = colorScheme == 'light' ? '#e3d097' : '#ad9f73';
+
   const conta = { id: 1, saldo: '1000000.5' };
   
   const pags = [
@@ -266,17 +272,17 @@ export function Home() {
 
           <View style={styles.sombra} className="h-[100px] w-full">
             <LinearGradient
-              colors={['#FAFAFA', '#e3d097']}
+              colors={[primeiraCor, segundaCor]}
               start={{ x: 0, y: 0 }}
               end={{ x: 0.5, y: 0 }}
               className="h-full w-full justify-between items-center py-2 px-4 relative overflow-hidden flex-row"
               style={{ borderRadius: 20 }}
             >
               <View className="z-20">
-                <Text className="text-preto font-popRegular text-[14px]">
+                <Text className="text-preto dark:text-branco font-popRegular text-[14px]">
                   Saldo atual
                 </Text>
-                <Text className="mt-[-3%] text-preto font-popRegular text-[22px]">
+                <Text className="mt-[-3%] text-preto dark:text-branco font-popRegular text-[22px]">
                   R$ {mostrarValor ? formataDinheiro(conta.saldo) : '••••••'}
                 </Text>
               </View>
@@ -285,9 +291,9 @@ export function Home() {
                 onPress={() => setMostrarValor(!mostrarValor)}
               >
                 {mostrarValor ? (
-                  <Eye size={24} color="#000" />
+                  <Eye size={24} color={cor} />
                 ) : (
-                  <EyeSlash size={24} color="#000" />
+                  <EyeSlash size={24} color={cor} />
                 )}
               </TouchableOpacity>
             </LinearGradient>
@@ -303,7 +309,7 @@ export function Home() {
           <View className='flex-row w-full items-center justify-center mt-[2%] gap-5 flex-wrap'>
             {proximosPagamentos.length > 0 ? (
                 proximosPagamentos.map((pag) => (
-                <View key={pag.id} className='flex-col bg-input p-4 w-[45%] py-6 rounded-[20px]' style={[styles.sombra]}>
+                <View key={pag.id} className='flex-col bg-input dark:bg-input-dark p-4 w-[45%] py-6 rounded-[20px]' style={[styles.sombra]}>
                   <View className='bg-branco rounded-full p-2 items-center w-[40px]'>
                     <IconeDinamico nome={pag.nome} cor={calcularDias(pag.dataProg) == 4
                       ? coresPadroes[4]
@@ -328,7 +334,7 @@ export function Home() {
                       ? coresPadroes[1]
                       : calcularDias(pag.dataProg) == 0
                       ? coresPadroes[0]
-                      : 'text-preto'
+                      : cor
                   }}>{pag.nome}</Text>
                   <Text className='font-popMedium text-[15px] mt-[2%]' style={{
                     color: calcularDias(pag.dataProg) == 4
@@ -341,10 +347,22 @@ export function Home() {
                       ? coresPadroes[1]
                       : calcularDias(pag.dataProg) == 0
                       ? coresPadroes[0]
-                      : 'text-preto'
+                      : cor
                   }}>
                     ${formataDinheiro(pag.valor)}
-                    <Text className='font-popRegular text-[11px]'>/mês</Text>
+                    <Text className='font-popRegular text-[11px]' style={{
+                    color: calcularDias(pag.dataProg) == 4
+                      ? coresPadroes[4]
+                      : calcularDias(pag.dataProg) == 3
+                      ? coresPadroes[3]
+                      : calcularDias(pag.dataProg) == 2
+                      ? coresPadroes[2]
+                      : calcularDias(pag.dataProg) == 1
+                      ? coresPadroes[1]
+                      : calcularDias(pag.dataProg) == 0
+                      ? coresPadroes[0]
+                      : cor
+                  }}>/mês</Text>
                   </Text>
                   <Text className='font-popRegular text-[13px] mt-[2%]'  style={{
                     color: calcularDias(pag.dataProg) == 4
@@ -357,7 +375,7 @@ export function Home() {
                       ? coresPadroes[1]
                       : calcularDias(pag.dataProg) == 0
                       ? coresPadroes[0]
-                      : 'text-preto'
+                      : cor
                   }}>
                     Daqui {calcularDias(pag.dataProg)} dias
                   </Text>
@@ -368,7 +386,7 @@ export function Home() {
             )}
           </View>
           
-          <View className='bg-input mt-[8%] rounded-[20px] p-4 flex-col w-full' style={[styles.sombra]}>
+          <View className='bg-input dark:bg-input-dark mt-[8%] rounded-[20px] p-4 flex-col w-full' style={[styles.sombra]}>
             <View className='flex-row justify-between items-center mb-2'>
               <Text className='font-popMedium text-[16px] text-preto dark:text-branco'>Gastos por categoria</Text>
               <DropdownMeses
@@ -433,7 +451,7 @@ export function Home() {
             )}
           </View>
 
-          <View className='bg-input mt-[4%] rounded-[20px] p-5 flex-col w-full' style={[styles.sombra]}>
+          <View className='bg-input dark:bg-input-dark mt-[4%] rounded-[20px] p-5 flex-col w-full' style={[styles.sombra]}>
             <View className='flex-row justify-between items-center mb-4'>
               <View className='flex-row items-center gap-2'>
                 <Text className='font-popMedium text-[16px] text-preto dark:text-branco'>% do salário gasto</Text>
@@ -471,7 +489,7 @@ export function Home() {
             </View>
           </View>
 
-          <View className='bg-input mt-[4%] rounded-[20px] p-5 flex-col w-full' style={[styles.sombra]}>
+          <View className='bg-input dark:bg-input-dark mt-[4%] rounded-[20px] p-5 flex-col w-full' style={[styles.sombra]}>
             <View className='flex-col justify-center items-start mb-6'>
               <Text className='font-popMedium text-[16px] text-preto dark:text-branco'>Frequência de resultados negativos</Text>
               <Text className="text-[#9C9999] font-popRegular text-[13px]">Últimos 6 meses</Text>
@@ -505,7 +523,7 @@ export function Home() {
 
           <View className='flex-row w-full justify-between mt-[4%]'>
             
-            <View className='bg-input rounded-[20px] p-5 w-[48%]' style={[styles.sombra]}>
+            <View className='bg-input dark:bg-input-dark rounded-[20px] p-5 w-[48%]' style={[styles.sombra]}>
               <View className='flex-row justify-between items-center mb-2'>
                 <Text className='font-popMedium text-[14px] text-preto dark:text-branco'>Sobras mensais</Text>
               </View>
@@ -523,7 +541,7 @@ export function Home() {
               </View>
             </View>
 
-            <View className='bg-input rounded-[20px] p-5 w-[48%]' style={[styles.sombra]}>
+            <View className='bg-input dark:bg-input-dark rounded-[20px] p-5 w-[48%]' style={[styles.sombra]}>
               <View className='flex-row justify-between items-center mb-1'>
                 <Text className='font-popMedium text-[14px] text-preto dark:text-branco'>Previsão de saldo</Text>
               </View>

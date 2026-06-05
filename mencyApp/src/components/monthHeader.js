@@ -1,6 +1,7 @@
 import { View, TouchableOpacity, StyleSheet, Animated } from "react-native";
 import { CaretLeft, CaretRight } from "phosphor-react-native";
 import { useRef } from "react";
+import { useColorScheme } from "nativewind";
 
 const months = [
   "Jan","Fev","Mar","Abr","Maio","Jun",
@@ -10,6 +11,9 @@ const months = [
 export function MonthHeader({ month, year, setMonth, setYear }) {
   const slideAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
+
+  const { colorScheme, toggleColorScheme } = useColorScheme();
+  const cor = colorScheme == 'dark' ? '#FAFAFA' : '#000';
 
   function animateChange(direction, updateState) {
     Animated.parallel([
@@ -69,7 +73,7 @@ export function MonthHeader({ month, year, setMonth, setYear }) {
   return (
     <View style={styles.container} className="flex-row justify-between items-center bg-input dark:bg-input-dark rounded-full px-3 w-[80%]">
       <TouchableOpacity onPress={handlePrev}>
-        <CaretLeft size={24} className='text-preto dark:text-branco' />
+        <CaretLeft size={24} color={cor} />
       </TouchableOpacity>
 
       <Animated.Text 
@@ -83,7 +87,7 @@ export function MonthHeader({ month, year, setMonth, setYear }) {
       </Animated.Text>
 
       <TouchableOpacity onPress={handleNext}>
-        <CaretRight size={24} className='text-preto dark:text-branco' />
+        <CaretRight size={24} color={cor}/>
       </TouchableOpacity>
     </View>
   );

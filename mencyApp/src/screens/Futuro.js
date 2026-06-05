@@ -6,6 +6,7 @@ import { CustomCalendar } from "../components/customCalendar";
 import { MonthHeader } from "../components/monthHeader";
 import { useState, useRef } from "react";
 import { IconeDinamico } from '../components/iconeDinamico';
+import { useColorScheme } from "nativewind";
 
 function calcularDias(dataAlvo) {
     const hoje = new Date();
@@ -21,6 +22,9 @@ function calcularDias(dataAlvo) {
 export function Futuro() {
     const [termoBusca, setTermoBusca] = useState("");
     
+    const { colorScheme, toggleColorScheme } = useColorScheme();
+    const cor = colorScheme == 'dark' ? '#FAFAFA' : '#000';
+
     const coresPadroes = [
         '#E8B635', 
         '#B2821A', 
@@ -178,7 +182,7 @@ export function Futuro() {
                         <View
                             key={`${event.id}-${index}`}
                             style={[styles.sombra]}
-                            className='bg-input flex-row items-center justify-between py-4 px-5 mt-[3%] w-[95%] rounded-[20px]'
+                            className='bg-input dark:bg-input-dark flex-row items-center justify-between py-4 px-5 mt-[3%] w-[95%] rounded-[20px]'
                         >
                             <View className='flex-row items-center w-full'> 
                                 <View className='bg-branco rounded-full p-2'>
@@ -208,7 +212,7 @@ export function Futuro() {
                                             ? coresPadroes[1]
                                             : calcularDias(event.dataProg) == 0
                                             ? coresPadroes[0]
-                                            : 'text-preto'
+                                            : cor
                                         }}>{event.nome}</Text>
 
                                         <Text className='font-popRegular text-[13px] mt-[2%]'  style={{
@@ -222,7 +226,7 @@ export function Futuro() {
                                             ? coresPadroes[1]
                                             : calcularDias(event.dataProg) == 0
                                             ? coresPadroes[0]
-                                            : 'text-preto'
+                                            : cor
                                         }}>
                                          {calcularDias(event.dataProg)} dias
                                         </Text>
@@ -239,7 +243,7 @@ export function Futuro() {
                                             ? coresPadroes[1]
                                             : calcularDias(event.dataProg) == 0
                                             ? coresPadroes[0]
-                                            : 'text-preto'
+                                            : cor
                                         }}>R${formataDinheiro(event.valor)}</Text>
                                         
                                         <Text className='font-popRegular text-[14px]' style={{
@@ -253,7 +257,7 @@ export function Futuro() {
                                             ? coresPadroes[1]
                                             : calcularDias(event.dataProg) == 0
                                             ? coresPadroes[0]
-                                            : 'text-preto'
+                                            : cor
                                         }}>{formataData(event.dataProg)}</Text>
                                     </View>
                                 </View>

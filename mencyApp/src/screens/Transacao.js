@@ -6,12 +6,18 @@ import { NavBottom } from '../components/navBottom';
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { IconeDinamico } from '../components/iconeDinamico'
+import { useColorScheme } from "nativewind";
 
 export function Transacao() {
     const conta = { id: 1, saldo: '1000000.5' };
     const [mostrarValor, setMostrarValor] = useState(false);
     const [busca, setBusca] = useState('');
     const navigation = useNavigation();
+
+    const { colorScheme, toggleColorScheme } = useColorScheme();
+    const cor = colorScheme == 'dark' ? '#FAFAFA' : '#000';
+    const primeiraCor = colorScheme == 'light' ? '#FAFAFA' : '#121212';
+    const segundaCor = colorScheme == 'light' ? '#e3d097' : '#ad9f73';
 
     const pags = [
         { id: 1, dataProg: '2026-05-05 14:30', valor: '20.40', nome: 'Youtube Premium', tipo: 'saida'},
@@ -38,17 +44,17 @@ export function Transacao() {
 
                     <View style={styles.sombra} className="h-[100px] w-full mb-[5%]">
                         <LinearGradient
-                            colors={['#FAFAFA', '#e3d097']}
+                            colors={[primeiraCor, segundaCor]}
                             start={{ x: 0, y: 0 }}
                             end={{ x: 0.5, y: 0 }}
                             className="h-full w-full justify-between items-center py-2 px-4 relative overflow-hidden flex-row"
                             style={{ borderRadius: 20 }}
                         >
                             <View className="z-20">
-                                <Text className="text-preto font-popRegular text-[14px]">
+                                <Text className="text-preto dark:text-branco font-popRegular text-[14px]">
                                     Saldo atual
                                 </Text>
-                                <Text className="mt-[-3%] text-preto font-popRegular text-[22px]">
+                                <Text className="mt-[-3%] text-preto dark:text-branco font-popRegular text-[22px]">
                                     R$ {mostrarValor ? formataDinheiro(conta.saldo) : '••••••'}
                                 </Text>
                             </View>
@@ -57,23 +63,23 @@ export function Transacao() {
                                 onPress={() => setMostrarValor(!mostrarValor)}
                             >
                                 {mostrarValor ? (
-                                    <Eye size={24} color="#000" />
+                                    <Eye size={24} color={cor} />
                                 ) : (
-                                    <EyeSlash size={24} color="#000" />
+                                    <EyeSlash size={24} color={cor} />
                                 )}
                             </TouchableOpacity>
                         </LinearGradient>
                     </View>
                     
                     {transacoesFiltradas.map((item) => (
-                        <View style={[styles.sombra]} key={item.id} className='bg-input flex-row items-center justify-between py-4 px-5 mt-[4%] w-full rounded-[20px]'>
+                        <View style={[styles.sombra]} key={item.id} className='bg-input dark:bg-input-dark flex-row items-center justify-between py-4 px-5 mt-[4%] w-full rounded-[20px]'>
                             <View className='flex-row items-center'> 
                                 <View className='bg-branco rounded-full p-2'>
                                     <IconeDinamico nome={item.nome} tamanho={30} />
                                 </View>
                                 <View className='flex-col ml-[3%]'>
-                                    <Text className='font-popRegular text-preto text-[16px]'>{item.nome}</Text>
-                                    <Text className='font-popRegular text-preto text-[14px]'>{formataData(item.dataProg)}</Text>
+                                    <Text className='font-popRegular text-preto dark:text-branco text-[16px]'>{item.nome}</Text>
+                                    <Text className='font-popRegular text-preto dark:text-branco text-[14px]'>{formataData(item.dataProg)}</Text>
                                 </View>
                             </View>
                             <Text className={`font-popRegular text-[16px] ${item.tipo === 'entrada' ? 'text-[#006A1D]' : 'text-[#A4000D]'}`}>
