@@ -1,9 +1,10 @@
-import { View, Text, KeyboardAvoidingView, ScrollView, Image, Platform, TouchableOpacity, Alert } from "react-native";
+import { View, Text, KeyboardAvoidingView, ScrollView, Image, Platform, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 import { Input } from '../components/input';
 import { useState } from "react";
 import { GoogleLogoIcon, Eye, EyeSlash } from "phosphor-react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useColorScheme } from "nativewind";
+import auth from '../api/auth';
 
 export function Cadastro(){
     const [nome, setNome] = useState("");
@@ -12,13 +13,40 @@ export function Cadastro(){
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [mostrarSenha, setMostrarSenha] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation();
 
-    
     const { colorScheme, toggleColorScheme } = useColorScheme();
     const cor = colorScheme == 'dark' ? '#FAFAFA' : '#000';
 
-    const handleCadastro = () => {
+    const handleCadastro = async () => {
+      if (!nome.trim() || !email.trim() || !senha.trim() || !cpf.trim()) {
+        Alert.alert("Erro", "Por favor, preencha todos os campos.");
+        return;
+      }
+
+      const cpfLimpo = cpf.replace(/\D/g, "");
+      if (cpfLimpo.length !== 11) {
+        Alert.alert("Erro", "CPF deve ter 11 dígitos.");
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        await auth.register({
+          name: nome,
+          email,
+          cpf: cpfLimpo,
+          password: senha,
+        });
+        Alert.alert("Sucesso", "Cadastro realizado! Faça login para continuar.");
+        navigation.navigate('Login');
+      } catch (error) {
+        const mensagem = error?.data?.message || error?.message || "Erro ao registrar. Tente novamente.";
+        Alert.alert("Erro", mensagem);
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     return(  
@@ -81,10 +109,15 @@ export function Cadastro(){
                         className="px-16 bg-amarelo w-[70%] rounded-[15px] items-center justify-center mt-2 py-2"
                         onPress={handleCadastro}
                         activeOpacity={0.8}
+                        disabled={isLoading}
                     >
-                        <Text className="text-branco font-popRegular text-[18px]">
-                        Cadastrar
-                        </Text>
+                        {isLoading ? (
+                          <ActivityIndicator size="small" color="#FAFAFA" />
+                        ) : (
+                          <Text className="text-branco font-popRegular text-[18px]">
+                          Cadastrar
+                          </Text>
+                        )}
                     </TouchableOpacity>
                     
                     <Text className='font-popLight text-[13px] mt-[10%] text-preto dark:text-branco' onPress={() => navigation.navigate('Login')}>
