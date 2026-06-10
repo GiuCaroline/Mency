@@ -96,19 +96,27 @@ export function Futuro() {
         return acc;
     }, {});
 
-    const filteredEvents = eventos.filter(event => {
+   const filteredEvents = eventos.filter(event => {
         if (!event || !event.diaExibicao) return false;
 
+        const dias = calcularDias(event.dataProg);
+
         if (termoBusca) {
-            return event.nome.toLowerCase().includes(termoBusca.toLowerCase());
+            return (
+                dias >= 0 &&
+                event.nome.toLowerCase().includes(termoBusca.toLowerCase())
+            );
         }
 
         if (selected) {
             return event.diaExibicao === selected;
         }
 
-        return event.diaExibicao.startsWith(
-            `${year}-${String(month + 1).padStart(2, "0")}`
+        return (
+            dias >= 0 &&
+            event.diaExibicao.startsWith(
+                `${year}-${String(month + 1).padStart(2, "0")}`
+            )
         );
     });
 
@@ -215,21 +223,24 @@ export function Futuro() {
                                             : cor
                                         }}>{event.nome}</Text>
 
-                                        <Text className='font-popRegular text-[13px] mt-[2%]'  style={{
-                                        color: calcularDias(event.dataProg) == 4
-                                            ? coresPadroes[4]
-                                            : calcularDias(event.dataProg) == 3
-                                            ? coresPadroes[3]
-                                            : calcularDias(event.dataProg) == 2
-                                            ? coresPadroes[2]
-                                            : calcularDias(event.dataProg) == 1
-                                            ? coresPadroes[1]
-                                            : calcularDias(event.dataProg) == 0
-                                            ? coresPadroes[0]
-                                            : cor
-                                        }}>
-                                         {calcularDias(event.dataProg)} dias
-                                        </Text>
+                                        {calcularDias(event.dataProg) >= 0 && (
+                                            <Text
+                                                className='font-popRegular text-[13px] mt-[2%]'
+                                                style={{
+                                                    color:
+                                                        calcularDias(event.dataProg) == 4 ? coresPadroes[4] :
+                                                        calcularDias(event.dataProg) == 3 ? coresPadroes[3] :
+                                                        calcularDias(event.dataProg) == 2 ? coresPadroes[2] :
+                                                        calcularDias(event.dataProg) == 1 ? coresPadroes[1] :
+                                                        calcularDias(event.dataProg) == 0 ? coresPadroes[0] :
+                                                        cor
+                                                }}
+                                            >
+                                                {calcularDias(event.dataProg) === 0
+                                                    ? 'Hoje'
+                                                    : `${calcularDias(event.dataProg)} dias`}
+                                            </Text>
+                                        )}
                                     </View>
                                     <View className='flex-row justify-between w-[92%]'>
                                         <Text className='font-popRegular text-[14px]' style={{

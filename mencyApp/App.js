@@ -14,6 +14,8 @@ import { Home } from './src/screens/Home';
 import { Transacao } from './src/screens/Transacao';
 import { Futuro } from './src/screens/Futuro';
 import { Perfil } from './src/screens/Perfil';
+import { EsqueciSenha } from './src/screens/EsqueciSenha';
+import { RedefinirSenha } from './src/screens/RedefinirSenha';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +52,8 @@ function AppContent() {
         <Stack.Screen name="Comeco" component={Comeco} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Cadastro" component={Cadastro} />
+        <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
+        <Stack.Screen name="RedefinirSenha" component={RedefinirSenha} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Transacao" component={Transacao} />
         <Stack.Screen name="Futuro" component={Futuro} />

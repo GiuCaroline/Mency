@@ -233,19 +233,27 @@ export function Home() {
                 proximosPagamentos.map((pag) => {
                   const dias = calcularDias(pag.dataProg);
                   const corItem = dias <= 4 ? coresPadroes[Math.max(0, dias)] : cor;
+                  const corItemIcon = dias <= 4 ? coresPadroes[Math.max(0, dias)] : '#000';
                   return (
                     <View key={pag.id} className='flex-col bg-input dark:bg-input-dark p-4 w-[45%] py-6 rounded-[20px]' style={styles.sombra}>
                       <View className='bg-branco rounded-full p-2 items-center w-[40px]'>
-                        <IconeDinamico nome={pag.nome} cor={corItem} />
+                        <IconeDinamico nome={pag.nome} cor={corItemIcon} />
                       </View>
                       <Text className='font-popMedium mt-[3%] text-[15px]' style={{ color: corItem }}>{pag.nome}</Text>
                       <Text className='font-popMedium text-[15px] mt-[2%]' style={{ color: corItem }}>
                         R$ {formataDinheiro(pag.valor)}
                         <Text className='font-popRegular text-[11px]' style={{ color: corItem }}>/mês</Text>
                       </Text>
-                      <Text className='font-popRegular text-[13px] mt-[2%]' style={{ color: corItem }}>
-                        Daqui {dias} dias
-                      </Text>
+                      {calcularDias(pag.dataProg) >= 0 && (
+                        <Text
+                            className='font-popRegular text-[13px] mt-[2%]'
+                            style={{ color: corItem }}
+                        >
+                            {calcularDias(pag.dataProg) === 0
+                                ? 'Hoje'
+                                : `Daqui ${calcularDias(pag.dataProg)} dias`}
+                        </Text>
+                    )}
                     </View>
                   );
                 })

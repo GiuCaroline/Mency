@@ -30,4 +30,18 @@ export async function deleteAccount() {
   return request('/auth/account', { method: 'DELETE' });
 }
 
-export default { register, login, logout, refresh, me, deleteAccount };
+export async function forgotPassword({ email }) {
+  return request('/auth/forgotpassword', {
+    method: 'POST',
+    body: { email },
+  });
+}
+
+export async function resetPassword({ token, password }) {
+  return request('/auth/resetpassword', {
+    method: 'POST',
+    body: { token, password },
+  });
+}
+
+export default { register, login, logout, refresh, me, deleteAccount, forgotPassword, resetPassword };
