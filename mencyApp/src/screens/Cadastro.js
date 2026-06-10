@@ -12,6 +12,8 @@ export function Cadastro(){
     const [telefone, setTelefone] = useState("");
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
+    const [cpfErro, setCpfErro] = useState("");
+    const [emailErro, setEmailErro] = useState("");
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation();
@@ -28,6 +30,16 @@ export function Cadastro(){
       const cpfLimpo = cpf.replace(/\D/g, "");
       if (cpfLimpo.length !== 11) {
         Alert.alert("Erro", "CPF deve ter 11 dígitos.");
+        return;
+      }
+
+      if (!validarCPF(cpfLimpo)) {
+        setCpfErro("CPF inválido");
+        return;
+      }
+
+      if (!validarEmail(email)) {
+        setEmailErro("E-mail inválido");
         return;
       }
 
@@ -72,18 +84,59 @@ export function Cadastro(){
                             onChangeText={setNome}
                         />
 
-                        <Input 
-                            texto={'CPF'} 
-                            value={cpf}
-                            onChangeText={(text) => setCpf(maskCPF(text))}
+                        <Input
+                          texto={'CPF'}
+                          value={cpf}
+                          onChangeText={(text) => {
+                            const cpfFormatado = maskCPF(text);
+                            setCpf(cpfFormatado);
+
+                            const cpfLimpo = cpfFormatado.replace(/\D/g, "");
+
+                            if (cpfLimpo.length === 11) {
+                              setCpfErro(
+                                validarCPF(cpfLimpo)
+                                  ? ""
+                                  : "CPF inválido"
+                              );
+                            } else {
+                              setCpfErro("");
+                            }
+                          }}
                         />
 
-                        <Input 
-                            texto={'Email'} 
-                            value={email}
-                            onChangeText={(text) => setEmail(text.toLowerCase())}
-                            keyboardType="email-address"
+                        {cpfErro ? (
+                          <Text className="text-vermelho text-[12px] w-full mt-[-8%] mb-[4%]">
+                            {cpfErro}
+                          </Text>
+                        ) : null}
+
+                        <Input
+                          texto={'Email'}
+                          value={email}
+                          onChangeText={(text) => {
+                            const emailFormatado = text.toLowerCase();
+
+                            setEmail(emailFormatado);
+
+                            if (emailFormatado.length > 0) {
+                              setEmailErro(
+                                validarEmail(emailFormatado)
+                                  ? ""
+                                  : "E-mail inválido"
+                              );
+                            } else {
+                              setEmailErro("");
+                            }
+                          }}
+                          keyboardType="email-address"
                         />
+
+                        {emailErro ? (
+                          <Text className="text-vermelho text-[12px] w-full mt-[-8%] mb-[4%]">
+                            {emailErro}
+                          </Text>
+                        ) : null}
                         
                         <View className="w-full relative">
                             <Input 
@@ -129,26 +182,40 @@ export function Cadastro(){
     )
 }
 
-function maskPhone(value) {
-  if (!value) return "";
-  
-  let v = value.replace(/\D/g, "");
+function validarCPF(cpf) {
+  cpf = cpf.replace(/\D/g, "");
 
-  if (v.length > 0) {
-    v = "(" + v;
+  if (cpf.length !== 11) return false;
+
+  // Impede CPFs iguais
+  if (/^(\d)\1+$/.test(cpf)) return false;
+
+  let soma = 0;
+
+  for (let i = 0; i < 9; i++) {
+    soma += parseInt(cpf.charAt(i)) * (10 - i);
   }
 
-  if (v.length > 3) {
-    v = v.slice(0, 3) + ") " + v.slice(3);
+  let resto = (soma * 10) % 11;
+  if (resto === 10) resto = 0;
+
+  if (resto !== parseInt(cpf.charAt(9))) return false;
+
+  soma = 0;
+
+  for (let i = 0; i < 10; i++) {
+    soma += parseInt(cpf.charAt(i)) * (11 - i);
   }
 
-  if (v.length > 10) {
-    v = v.slice(0, 10) + "-" + v.slice(10, 14);
-  }
+  resto = (soma * 10) % 11;
+  if (resto === 10) resto = 0;
 
-  return v;
+  return resto === parseInt(cpf.charAt(10));
 }
 
+function validarEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
 function maskCPF(value) {
   if (!value) return "";
