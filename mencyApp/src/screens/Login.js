@@ -7,6 +7,7 @@ import { useColorScheme } from "nativewind";
 import { useAuth } from '../context/AuthContext';
 import pluggy from '../api/pluggy';
 import { PluggyConnect } from 'react-native-pluggy-connect';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export function Login(){
   const [email, setEmail] = useState("");
@@ -44,6 +45,23 @@ export function Login(){
       Alert.alert("Erro", mensagem);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  GoogleSignin.configure({
+    webClientId: '291206403971-ptrm7l0o3fi438mjmltenm1ug4n17an2.apps.googleusercontent.com',
+    iosClientId: '291206403971-l480gq64oufcucc20f1q58h2r5sr34nf.apps.googleusercontent.com',
+  });
+
+  const handleGoogleLogin = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      
+      console.log(userInfo);
+      
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível abrir o login do Google.");
     }
   };
 
@@ -122,7 +140,10 @@ export function Login(){
               <View className='h-[1px] w-[15%] bg-preto dark:bg-branco' />
             </View>
 
-            <TouchableOpacity className='flex-row justify-center border bg-transparent rounded-xl gap-2 p-1 mt-[10%] border-preto dark:border-branco'>
+            <TouchableOpacity 
+              className='flex-row justify-center border bg-transparent rounded-xl gap-2 p-1 mt-[10%] border-preto dark:border-branco'
+              onPress={handleGoogleLogin}
+            >
               <GoogleLogoIcon weight="regular" size={25} color={cor} />
               <Text className='font-popRegular text-[18px] text-preto dark:text-branco'>Acesse pelo Google</Text>
             </TouchableOpacity>

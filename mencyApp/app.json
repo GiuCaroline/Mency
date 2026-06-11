@@ -15,12 +15,12 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/capaApp.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/capaApp.png"
     },
     "plugins": [
       "expo-font",
