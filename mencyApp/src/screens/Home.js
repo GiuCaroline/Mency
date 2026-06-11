@@ -23,10 +23,6 @@ import {
 
 const AnimatedG = Animated.createAnimatedComponent(G);
 
-const coresPadroes = [
-  '#E8B635', '#B2821A', '#8D6409', '#634401',
-  '#3F2B00', '#F4C430', '#D4AF37', '#AA6C39'
-];
 
 function coordenadasPolares(cx, cy, r, anguloGraus) {
   const anguloRadianos = (anguloGraus - 90) * Math.PI / 180.0;
@@ -68,6 +64,10 @@ export function Home() {
   const cor = colorScheme == 'dark' ? '#FAFAFA' : '#000';
   const primeiraCor = colorScheme == 'light' ? '#FAFAFA' : '#121212';
   const segundaCor = colorScheme == 'light' ? '#e3d097' : '#ad9f73';
+  const coresPadroes = [
+    '#E8B635', '#B2821A', '#8D6409', '#634401',
+    colorScheme == 'dark' ? '#5f4a1d' : '#3F2B00', '#F4C430', '#D4AF37', '#AA6C39'
+  ];
 
   const [contas, setContas] = useState([]);
   const [totalSaldo, setTotalSaldo] = useState(0);

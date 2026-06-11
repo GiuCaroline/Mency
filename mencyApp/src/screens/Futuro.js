@@ -57,7 +57,7 @@ export function Futuro() {
         '#B2821A', 
         '#8D6409', 
         '#634401', 
-        '#3F2B00', 
+        colorScheme == 'dark' ? '#5f4a1d' : '#3F2B00', 
         '#F4C430', 
         '#D4AF37', 
         '#AA6C39'  
