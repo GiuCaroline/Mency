@@ -80,43 +80,6 @@ export function Home() {
   const [categoriaElevada, setCategoriaElevada] = useState(null);
   const [termoBusca, setTermoBusca] = useState("");
 
-  const pags = [
-  { id: 1, dataProg: '2026-06-05', valor: '20.40', nome: 'Youtube Premium' },
-  { id: 2, dataProg: '2026-06-11', valor: '60.0', nome: 'Discord - Nitro' },
-  { id: 3, dataProg: '2026-08-05', valor: '10.99', nome: 'Google Photos' }
-  ];
-
-  const proximosPagamentos = useMemo(() => {
-    const hoje = new Date();
-    hoje.setHours(0, 0, 0, 0);
-
-    let filtrados = pags.filter(pag => {
-      const partes = pag.dataProg.split('-');
-      const dataPag = new Date(partes[0], partes[1] - 1, partes[2]);
-      return dataPag >= hoje;
-    });
-
-    filtrados.sort((a, b) => {
-      const pa = a.dataProg.split('-');
-      const pb = b.dataProg.split('-');
-      return new Date(pa[0], pa[1]-1, pa[2]) - new Date(pb[0], pb[1]-1, pb[2]);
-    });
-
-    if (termoBusca.trim()) {
-      filtrados = filtrados.filter(p => p.nome.toLowerCase().includes(termoBusca.toLowerCase()));
-    }
-
-    return filtrados.slice(0, 2);
-  }, [termoBusca]);
-
-  function calcularDias(dataAlvo) {
-    const hoje = new Date();
-    hoje.setHours(0, 0, 0, 0);
-    const partes = dataAlvo.split('-');
-    const data = new Date(partes[0], partes[1] - 1, partes[2]);
-    return Math.ceil((data.getTime() - hoje.getTime()) / (1000 * 3600 * 24));
-  }
-
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -135,6 +98,99 @@ export function Home() {
       setMesSelecionadoSalario(meses[0].chave);
     }
   }, [dadosFinanceiros]);
+
+  // --- LÓGICA DE PREVISÃO DE PAGAMENTOS FUTUROS ---
+  const previsoesFuturas = useMemo(() => {
+    if (!todasTransacoes || todasTransacoes.length === 0) return [];
+
+    const gruposDescricao = {};
+    const today = new Date();
+
+    todasTransacoes.forEach(t => {
+      const valor = Number(t.valor ?? t.amount ?? t.value ?? 0);
+      if (valor > 0) return; // Apenas gastos
+
+      const descricao = (t.descricao || t.description || t.merchant || 'Desconhecido').trim();
+      if (!gruposDescricao[descricao]) gruposDescricao[descricao] = [];
+      gruposDescricao[descricao].push({
+        ...t,
+        amount: valor,
+        date: new Date(t.data || t.date || t.createdAt)
+      });
+    });
+
+    const previsoes = [];
+    let contadorId = 1;
+
+    for (const desc in gruposDescricao) {
+      const transacoes = gruposDescricao[desc];
+      
+      if (transacoes.length >= 2) {
+        transacoes.sort((a, b) => a.date - b.date);
+        const ultimasDuas = transacoes.slice(-2);
+        
+        const mes1 = ultimasDuas[0].date.getMonth();
+        const mes2 = ultimasDuas[1].date.getMonth();
+
+        if (mes1 !== mes2) {
+          const somaDias = ultimasDuas.reduce((acc, t) => acc + t.date.getDate(), 0);
+          const diaMedio = Math.round(somaDias / 2);
+          
+          const somaValores = ultimasDuas.reduce((acc, t) => acc + t.amount, 0);
+          const valorMedio = Math.abs(somaValores / 2);
+
+          // i = 0 inclui o mês atual caso a data de vencimento ainda não tenha chegado
+          for (let i = 0; i <= 2; i++) {
+            const dataFutura = new Date(today.getFullYear(), today.getMonth() + i, diaMedio);
+            const ano = dataFutura.getFullYear();
+            const mes = String(dataFutura.getMonth() + 1).padStart(2, '0');
+            const dia = String(dataFutura.getDate()).padStart(2, '0');
+            const dataProgStr = `${ano}-${mes}-${dia}`;
+
+            previsoes.push({
+              id: contadorId++,
+              dataProg: dataProgStr,
+              valor: valorMedio.toFixed(2),
+              nome: desc,
+            });
+          }
+        }
+      }
+    }
+    return previsoes;
+  }, [todasTransacoes]);
+
+  // Filtra as previsões e exibe apenas os 2 próximos pagamentos na Home
+  const proximosPagamentos = useMemo(() => {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    let filtrados = previsoesFuturas.filter(pag => {
+      const partes = pag.dataProg.split('-');
+      const dataPag = new Date(partes[0], partes[1] - 1, partes[2]);
+      return dataPag >= hoje; // Apenas datas futuras ou de hoje
+    });
+
+    filtrados.sort((a, b) => {
+      const pa = a.dataProg.split('-');
+      const pb = b.dataProg.split('-');
+      return new Date(pa[0], pa[1]-1, pa[2]) - new Date(pb[0], pb[1]-1, pb[2]);
+    });
+
+    if (termoBusca.trim()) {
+      filtrados = filtrados.filter(p => p.nome.toLowerCase().includes(termoBusca.toLowerCase()));
+    }
+
+    return filtrados.slice(0, 2); // Mantém os 2 primeiros na Home
+  }, [previsoesFuturas, termoBusca]);
+
+  function calcularDias(dataAlvo) {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    const partes = dataAlvo.split('-');
+    const data = new Date(partes[0], partes[1] - 1, partes[2]);
+    return Math.ceil((data.getTime() - hoje.getTime()) / (1000 * 3600 * 24));
+  }
 
   const mesesDisponiveis = useMemo(() => extrairMesesDisponiveis(todasTransacoes), [todasTransacoes]);
 
@@ -163,7 +219,6 @@ export function Home() {
     [mesesDisponiveis]
   );
 
-  // Adapta o dropdown que espera 'atual' ou 'YYYY-MM'
   const mesesDropdownGastos = useMemo(() => mesesParaDropdown, [mesesParaDropdown]);
   const mesesDropdownSalario = useMemo(() => mesesParaDropdown, [mesesParaDropdown]);
 
@@ -180,12 +235,12 @@ export function Home() {
   });
 
   if (loadingFinanceiros && !dadosFinanceiros) {
-  return (
-    <View className='flex-1 bg-branco dark:bg-preto-dark items-center justify-center'>
-      <ActivityIndicator size="large" color="#E8B635" />
-    </View>
-  );
-}
+    return (
+      <View className='flex-1 bg-branco dark:bg-preto-dark items-center justify-center'>
+        <ActivityIndicator size="large" color="#E8B635" />
+      </View>
+    );
+  }
 
   return (
     <View className='flex-1 bg-branco dark:bg-preto-dark'>
@@ -220,7 +275,7 @@ export function Home() {
             </LinearGradient>
           </View>
 
-          {/* Pagamentos futuros — mantido mocado por enquanto */}
+          {/* Pagamentos futuros */}
           <View className='flex-row justify-between items-center w-full mt-[8%]'>
             <Text className='font-popMedium text-[18px] text-preto dark:text-branco'>Pagamentos futuros</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Futuro')}>
@@ -239,7 +294,7 @@ export function Home() {
                       <View className='bg-branco rounded-full p-2 items-center w-[40px]'>
                         <IconeDinamico nome={pag.nome} cor={corItemIcon} />
                       </View>
-                      <Text className='font-popMedium mt-[3%] text-[15px]' style={{ color: corItem }}>{pag.nome}</Text>
+                      <Text className='font-popMedium mt-[3%] text-[15px]' style={{ color: corItem }} numberOfLines={1}>{pag.nome}</Text>
                       <Text className='font-popMedium text-[15px] mt-[2%]' style={{ color: corItem }}>
                         R$ {formataDinheiro(pag.valor)}
                         <Text className='font-popRegular text-[11px]' style={{ color: corItem }}>/mês</Text>
@@ -258,7 +313,7 @@ export function Home() {
                   );
                 })
               ) : (
-                <Text className="text-[#9C9999] font-popRegular mt-2">Nenhum pagamento encontrado.</Text>
+                <Text className="text-[#9C9999] font-popRegular mt-2">Nenhum pagamento futuro próximo.</Text>
               )}
             </View>
           </View>
