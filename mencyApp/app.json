@@ -15,12 +15,12 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/capaApp.png",
+      "image": "./assets/logoCapaArl.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "web": {
-      "favicon": "./assets/capaApp.png"
+      "favicon": "./assets/logoCapaArl.png"
     },
     "plugins": [
       "expo-font",
