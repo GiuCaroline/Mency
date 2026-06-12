@@ -67,7 +67,7 @@ export function Search({ onSearch, placeholder = "Pesquisar..." }) {
                             }}
                         />
                         <TouchableOpacity onPress={toggleSearch} className="p-4">
-                            <X size={20} color="#000" />
+                            <X size={20} color={cor} />
                         </TouchableOpacity>
                     </>
                 )}

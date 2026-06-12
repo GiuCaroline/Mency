@@ -59,7 +59,7 @@ function Tab({ label, icon: Icon, active, onPress }) {
         color={active ? "#C19200" : cor}
       />
 
-      <Text className={`text-[11px] ${active ? "text-amarelo" : "text-[#313131]"} dark:text-branco font-popRegular`}>
+      <Text className='text-[11px] font-popRegular' style={{ color: active ? "#C19200" : cor }}>
         {label}
       </Text>
     </Pressable>
