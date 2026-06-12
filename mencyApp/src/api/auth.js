@@ -31,14 +31,14 @@ export async function deleteAccount() {
 }
 
 export async function forgotPassword({ email }) {
-  return request('/auth/forgotpassword', {
+  return request('/auth/forgot-password', {
     method: 'POST',
     body: { email },
   });
 }
 
 export async function resetPassword({ token, password }) {
-  return request('/auth/resetpassword', {
+  return request('/auth/reset-password', {
     method: 'POST',
     body: { token, password },
   });
