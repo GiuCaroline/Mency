@@ -16,7 +16,7 @@ export function Login(){
   const [showWidget, setShowWidget] = useState(false);
   const [connectToken, setConnectToken] = useState(null);
   const navigation = useNavigation();
-  const { login } = useAuth();
+  const { login, loginGoogle } = useAuth();
 
   const { colorScheme } = useColorScheme();
   const cor = colorScheme == 'dark' ? '#FAFAFA' : '#000';
@@ -58,10 +58,24 @@ export function Login(){
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       
-      console.log(userInfo);
+      const idToken = userInfo.data.idToken;
+      
+      await loginGoogle(idToken);
+      
+      try {
+        const itemsCheck = await pluggy.checkItems();
+        if (itemsCheck?.hasItems) {
+          navigation.navigate('Home');
+        } else {
+          openPluggyWidget();
+        }
+      } catch {
+        openPluggyWidget();
+      }
       
     } catch (error) {
       Alert.alert("Erro", "Não foi possível abrir o login do Google.");
+      console.log(error);
     }
   };
 
