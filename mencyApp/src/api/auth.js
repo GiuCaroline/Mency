@@ -44,11 +44,4 @@ export async function resetPassword({ token, password }) {
   });
 }
 
-export async function loginWithGoogle({ idToken }) {
-  return request('/auth/google', {
-    method: 'POST',
-    body: { idToken },
-  });
-}
-
-export default { register, login, logout, refresh, me, deleteAccount, forgotPassword, resetPassword, loginWithGoogle };
+export default { register, login, logout, refresh, me, deleteAccount, forgotPassword, resetPassword };

@@ -39,12 +39,6 @@ export function AuthProvider({ children }) {
     setDadosFinanceiros(null);
   };
 
-  const loginGoogle = async (idToken) => {
-    const data = await auth.loginWithGoogle({ idToken });
-    setUsuario(data.user);
-    return data;
-  };
-
   const carregarDadosFinanceiros = async (forcar = false) => {
     if (dadosFinanceiros && !forcar) return dadosFinanceiros;
     if (loadingFinanceiros) return null;
