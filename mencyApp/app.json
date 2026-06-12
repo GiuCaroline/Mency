@@ -25,14 +25,7 @@
     "plugins": [
       "expo-font",
       "expo-web-browser",
-      "expo-secure-store",
-      "expo-dev-client",
-      [
-        "@react-native-google-signin/google-signin",
-        {
-          "iosUrlScheme": "com.googleusercontent.apps._some_id_here_"
-        }
-      ]
+      "expo-secure-store"
     ],
     "extra": {
       "eas": {
