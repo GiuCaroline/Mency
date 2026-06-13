@@ -19,10 +19,12 @@ import {
   calcularTodasEntradas,
   extrairMesesDisponiveis,
   filtrarPorMes,
+  calcularSobrasMensais,
+  calcularFrequenciaNegativos,
+  calcularPrevisaoSaldo,
 } from '../utils/financial.js';
 
 const AnimatedG = Animated.createAnimatedComponent(G);
-
 
 function coordenadasPolares(cx, cy, r, anguloGraus) {
   const anguloRadianos = (anguloGraus - 90) * Math.PI / 180.0;
@@ -108,7 +110,7 @@ export function Home() {
 
     todasTransacoes.forEach(t => {
       const valor = Number(t.valor ?? t.amount ?? t.value ?? 0);
-      if (valor > 0) return; // Apenas gastos
+      if (valor > 0) return;
 
       const descricao = (t.descricao || t.description || t.merchant || 'Desconhecido').trim();
       if (!gruposDescricao[descricao]) gruposDescricao[descricao] = [];
@@ -124,22 +126,21 @@ export function Home() {
 
     for (const desc in gruposDescricao) {
       const transacoes = gruposDescricao[desc];
-      
+
       if (transacoes.length >= 2) {
         transacoes.sort((a, b) => a.date - b.date);
         const ultimasDuas = transacoes.slice(-2);
-        
+
         const mes1 = ultimasDuas[0].date.getMonth();
         const mes2 = ultimasDuas[1].date.getMonth();
 
         if (mes1 !== mes2) {
           const somaDias = ultimasDuas.reduce((acc, t) => acc + t.date.getDate(), 0);
           const diaMedio = Math.round(somaDias / 2);
-          
+
           const somaValores = ultimasDuas.reduce((acc, t) => acc + t.amount, 0);
           const valorMedio = Math.abs(somaValores / 2);
 
-          // i = 0 inclui o mês atual caso a data de vencimento ainda não tenha chegado
           for (let i = 0; i <= 2; i++) {
             const dataFutura = new Date(today.getFullYear(), today.getMonth() + i, diaMedio);
             const ano = dataFutura.getFullYear();
@@ -160,7 +161,6 @@ export function Home() {
     return previsoes;
   }, [todasTransacoes]);
 
-  // Filtra as previsões e exibe apenas os 2 próximos pagamentos na Home
   const proximosPagamentos = useMemo(() => {
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
@@ -168,7 +168,7 @@ export function Home() {
     let filtrados = previsoesFuturas.filter(pag => {
       const partes = pag.dataProg.split('-');
       const dataPag = new Date(partes[0], partes[1] - 1, partes[2]);
-      return dataPag >= hoje; // Apenas datas futuras ou de hoje
+      return dataPag >= hoje;
     });
 
     filtrados.sort((a, b) => {
@@ -181,7 +181,7 @@ export function Home() {
       filtrados = filtrados.filter(p => p.nome.toLowerCase().includes(termoBusca.toLowerCase()));
     }
 
-    return filtrados.slice(0, 2); // Mantém os 2 primeiros na Home
+    return filtrados.slice(0, 2);
   }, [previsoesFuturas, termoBusca]);
 
   function calcularDias(dataAlvo) {
@@ -233,6 +233,24 @@ export function Home() {
     const caminho = criarArco(90, 90, 55, anguloInicial, anguloFinal);
     return { ...item, cor: coresPadroes[index % coresPadroes.length], porcentagem, anguloMeio, caminho };
   });
+
+  // --- Frequência de negativos, sobras mensais e previsão de saldo ---
+  const sobras = useMemo(() => calcularSobrasMensais(todasTransacoes), [todasTransacoes]);
+  const frequenciaNegativos = useMemo(() => calcularFrequenciaNegativos(todasTransacoes), [todasTransacoes]);
+  const previsao = useMemo(() => calcularPrevisaoSaldo(totalSaldo, todasTransacoes), [todasTransacoes, totalSaldo]);
+
+  const larguraLinha = 280;
+  const alturaLinha = 60;
+  const offsetLinhaX = 30;
+  const offsetLinhaY = 20;
+
+  const pontosGraficoLinha = frequenciaNegativos.map((d, i) => {
+    const x = offsetLinhaX + (i * (larguraLinha / (frequenciaNegativos.length - 1)));
+    const y = offsetLinhaY + (alturaLinha - ((d.valor / 100) * alturaLinha));
+    return { x, y, ...d };
+  });
+
+  const caminhoLinha = pontosGraficoLinha.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
 
   if (loadingFinanceiros && !dadosFinanceiros) {
     return (
@@ -423,6 +441,81 @@ export function Home() {
                 </View>
               </View>
             )}
+          </View>
+
+          {/* Frequência de resultados negativos */}
+          <View className='bg-input dark:bg-input-dark mt-[4%] rounded-[20px] p-5 flex-col w-full' style={styles.sombra}>
+            <View className='flex-col justify-center items-start mb-6'>
+              <Text className='font-popMedium text-[16px] text-preto dark:text-branco'>Frequência de resultados negativos</Text>
+              <Text className="text-[#9C9999] font-popRegular text-[13px]">Últimos 6 meses</Text>
+            </View>
+
+            <View className='w-full items-center justify-center'>
+              <Svg width="330" height="120" viewBox="0 0 330 120">
+                <Line x1={offsetLinhaX} y1={offsetLinhaY} x2={offsetLinhaX} y2={offsetLinhaY + alturaLinha} stroke="#D1D5DB" strokeWidth="1" />
+                <Line x1={offsetLinhaX} y1={offsetLinhaY + alturaLinha} x2={offsetLinhaX + larguraLinha + 10} y2={offsetLinhaY + alturaLinha} stroke="#D1D5DB" strokeWidth="1" />
+
+                <SvgText x={offsetLinhaX - 5} y={offsetLinhaY + 5} fontSize="10" fill="#9C9999" textAnchor="end">100%</SvgText>
+                <SvgText x={offsetLinhaX - 5} y={offsetLinhaY + (alturaLinha / 2) + 4} fontSize="10" fill="#9C9999" textAnchor="end">50%</SvgText>
+                <SvgText x={offsetLinhaX - 5} y={offsetLinhaY + alturaLinha + 4} fontSize="10" fill="#9C9999" textAnchor="end">0%</SvgText>
+
+                <Path d={caminhoLinha} fill="none" stroke={coresPadroes[0]} strokeWidth="1.5" />
+
+                {pontosGraficoLinha.map((p, i) => (
+                  <G key={i}>
+                    <Circle cx={p.x} cy={p.y} r="3" fill={coresPadroes[0]} />
+                    <SvgText x={p.x} y={p.y - 10} fontSize="10" fill="#4A4A4A" textAnchor="middle" fontWeight="bold">
+                      {p.valor}%
+                    </SvgText>
+                    <SvgText x={p.x} y={offsetLinhaY + alturaLinha + 15} fontSize="10" fill="#9C9999" textAnchor="middle">
+                      {p.mes}
+                    </SvgText>
+                  </G>
+                ))}
+              </Svg>
+            </View>
+          </View>
+
+          {/* Sobras mensais + Previsão de saldo */}
+          <View className='flex-row w-full justify-between mt-[4%]'>
+
+            <View className='bg-input dark:bg-input-dark rounded-[20px] p-5 w-[48%]' style={styles.sombra}>
+              <View className='flex-row justify-between items-center mb-2'>
+                <Text className='font-popMedium text-[14px] text-preto dark:text-branco'>Sobras mensais</Text>
+              </View>
+              <Text className='font-popMedium text-[20px] text-[#E8B635] mt-1'>
+                R$ {formataDinheiro(sobras.atual)}
+              </Text>
+
+              <View className='h-[1px] bg-[#e3e1e1] mt-2' />
+
+              <View className='mt-3'>
+                <Text className='font-popRegular text-[10px] text-[#9C9999] mb-1'>Média dos últimos 6 meses</Text>
+                <Text className='font-popMedium text-[13px] text-[#E8B635]'>
+                  R$ {formataDinheiro(sobras.media6Meses)}
+                </Text>
+              </View>
+            </View>
+
+            <View className='bg-input dark:bg-input-dark rounded-[20px] p-5 w-[48%]' style={styles.sombra}>
+              <View className='flex-row justify-between items-center mb-1'>
+                <Text className='font-popMedium text-[14px] text-preto dark:text-branco'>Previsão de saldo</Text>
+              </View>
+              <Text className='font-popRegular text-[9px] text-[#9C9999] mb-2'>Próximo mês, considerando médias recentes</Text>
+              <Text className='font-popMedium text-[20px]' style={{ color: previsao.saldo < 0 ? '#8D6409' : '#E8B635' }}>
+                {previsao.saldo < 0 ? '-' : ''}R$ {formataDinheiro(Math.abs(previsao.saldo))}
+              </Text>
+
+              {previsao.saldo < 0 && (
+                <View className='bg-[#8D6409] dark:bg-[#5C2B29] p-2 rounded-[8px] mt-3 flex-row items-center gap-2'>
+                  <WarningCircle size={14} color="#ffd66e" weight="fill" />
+                  <Text className='font-popRegular text-[9px] text-[#ffd66e] dark:text-[#F28B82] flex-1 leading-tight'>
+                    Seu saldo pode ficar negativo até dia {previsao.dataAviso}
+                  </Text>
+                </View>
+              )}
+            </View>
+
           </View>
 
         </View>

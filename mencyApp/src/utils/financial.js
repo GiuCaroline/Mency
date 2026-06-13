@@ -259,3 +259,58 @@ export function normalizeTransactionsResponse(response) {
   if (response.data && Array.isArray(response.data.transacoes)) return response.data.transacoes;
   return [];
 }
+
+export function calcularSaldoMensal(transacoes, chaveMes) {
+  const doMes = filtrarPorMes(transacoes, chaveMes);
+  const entradas = calcularTodasEntradas(doMes);
+  const gastos = calcularTotalGastos(doMes);
+  return entradas - gastos;
+}
+
+export function obterUltimosNMeses(n = 6) {
+  const meses = [];
+  const hoje = new Date();
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
+    meses.push({
+      chave: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`,
+      label: d.toLocaleString('pt-BR', { month: 'short' }).replace('.', ''),
+    });
+  }
+  return meses;
+}
+
+export function calcularSobrasMensais(transacoes) {
+  const meses = obterUltimosNMeses(6);
+  const saldos = meses.map(m => calcularSaldoMensal(transacoes, m.chave));
+  const atual = saldos[saldos.length - 1] || 0;
+  const media = saldos.reduce((a, b) => a + b, 0) / saldos.length;
+  return { atual, media6Meses: media };
+}
+
+export function calcularFrequenciaNegativos(transacoes) {
+  const meses = obterUltimosNMeses(6);
+  const saldos = meses.map(m => ({ ...m, saldo: calcularSaldoMensal(transacoes, m.chave) }));
+
+  const piorSaldo = Math.min(...saldos.map(s => s.saldo), 0);
+  const baseNegativa = Math.abs(piorSaldo) || 1;
+
+  return saldos.map(s => ({
+    mes: s.label,
+    valor: s.saldo < 0 ? clampPercentage((Math.abs(s.saldo) / baseNegativa) * 100) : 0,
+  }));
+}
+
+export function calcularPrevisaoSaldo(totalSaldo, transacoes) {
+  const meses = obterUltimosNMeses(3);
+  const mediaGastoMensal = meses.reduce((acc, m) => acc + calcularTotalGastos(filtrarPorMes(transacoes, m.chave)), 0) / meses.length;
+  const mediaEntradaMensal = meses.reduce((acc, m) => acc + calcularTodasEntradas(filtrarPorMes(transacoes, m.chave)), 0) / meses.length;
+
+  const saldoProjetado = totalSaldo + (mediaEntradaMensal - mediaGastoMensal);
+
+  const hoje = new Date();
+  const proximoMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, hoje.getDate());
+  const dataAviso = `${String(proximoMes.getDate()).padStart(2, '0')}/${String(proximoMes.getMonth() + 1).padStart(2, '0')}`;
+
+  return { saldo: saldoProjetado, dataAviso };
+}
