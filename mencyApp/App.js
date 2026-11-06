@@ -16,6 +16,7 @@ import { Futuro } from './src/screens/Futuro';
 import { Perfil } from './src/screens/Perfil';
 import { EsqueciSenha } from './src/screens/EsqueciSenha';
 import { RedefinirSenha } from './src/screens/RedefinirSenha';
+import { Assistente } from './src/screens/Assistente';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,6 +59,7 @@ function AppContent() {
         <Stack.Screen name="Transacao" component={Transacao} />
         <Stack.Screen name="Futuro" component={Futuro} />
         <Stack.Screen name="Perfil" component={Perfil} />
+        <Stack.Screen name="Assistente" component={Assistente} />
       </Stack.Navigator>
       <StatusBar />
     </NavigationContainer>
