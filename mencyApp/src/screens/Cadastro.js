@@ -43,6 +43,11 @@ export function Cadastro(){
         return;
       }
 
+      if (senha.length < 8) {
+        Alert.alert("Erro", "A senha deve ter pelo menos 8 caracteres.");
+        return;
+      }
+
       setIsLoading(true);
       try {
         await auth.register({

@@ -18,7 +18,12 @@ export function RedefinirSenha(){
       return;
     }
     
-    if (!token) {
+    if (senha.length < 8) {
+      Alert.alert("Erro", "A senha deve ter pelo menos 8 caracteres.");
+      return;
+    }
+
+    if (typeof token !== 'string' || token.length !== 64) {
       Alert.alert("Erro", "Link inválido ou expirado.");
       return;
     }
@@ -27,9 +32,11 @@ export function RedefinirSenha(){
     try {
       await resetPassword({ token, password: senha });
       Alert.alert("Sucesso", "Senha atualizada com sucesso!");
-      navigation.navigate('Login');
+      navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
     } catch (error) {
-      Alert.alert("Erro", "Não foi possível redefinir sua senha.");
+      Alert.alert("Erro", error?.status === 400
+        ? "Link inválido ou expirado. Peça um novo em \"Esqueci minha senha\"."
+        : "Não foi possível redefinir sua senha.");
     } finally {
       setLoading(false);
     }
@@ -53,7 +60,7 @@ export function RedefinirSenha(){
           </Text>
 
           <View className='w-[350px] mt-[5%] items-center'>
-            <Input texto={'Nova Senha'} value={senha} onChangeText={setSenha} secureTextEntry={true} />
+            <Input texto={'Nova Senha'} value={senha} onChangeText={setSenha} seguranca={true} />
           </View>
 
           <TouchableOpacity

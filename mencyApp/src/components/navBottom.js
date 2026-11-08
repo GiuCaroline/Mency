@@ -138,7 +138,7 @@ function Tab({ label, icon: Icon, active, onPress, cor }) {
     style={{
      color: active ? "#C19200" : cor,
      fontSize: 11,
-     fontFamily: "popRegular",
+     fontFamily: "Poppins_400Regular",
      marginTop: 3,
     }}
    >

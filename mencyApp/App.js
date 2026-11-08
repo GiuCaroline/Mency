@@ -5,7 +5,13 @@ import { StatusBar } from 'expo-status-bar';
 import { useFonts, Poppins_200ExtraLight, Poppins_300Light, Poppins_400Regular,
     Poppins_600SemiBold_Italic, Poppins_500Medium, Poppins_600SemiBold, Poppins_700Bold } from '@expo-google-fonts/poppins';
 
+import * as Linking from 'expo-linking';
+import { LogBox } from 'react-native';
+
 import { AuthProvider } from './src/context/AuthContext';
+import { navigationRef } from './src/navigation/navigationRef';
+
+LogBox.ignoreLogs(['Non-serializable values']);
 
 import { Comeco } from './src/screens/Comeco';
 import { Login } from './src/screens/Login';
@@ -39,9 +45,19 @@ export default function App() {
   );
 }
 
+// Link do e-mail de "esqueci minha senha": mency://redefinir-senha?token=...
+const linking = {
+  prefixes: [Linking.createURL('/'), 'mency://'],
+  config: {
+    screens: {
+      RedefinirSenha: 'redefinir-senha',
+    },
+  },
+};
+
 function AppContent() {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef} linking={linking}>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

@@ -7,8 +7,7 @@ import { MonthHeader } from "../components/monthHeader";
 import { useState, useRef, useEffect } from "react";
 import { IconeDinamico } from '../components/iconeDinamico';
 import { useColorScheme } from "nativewind";
-import { listAccounts, getAccountTransactions } from '../api/pluggy';
-import { normalizeListResponse, normalizeTransactionsResponse } from '../utils/financial';
+import { useAuth } from '../context/AuthContext';
 
 function calcularDias(dataAlvo) {
     const hoje = new Date();
@@ -48,7 +47,8 @@ export function Futuro() {
     const [termoBusca, setTermoBusca] = useState("");
     const [eventos, setEventos] = useState([]);
     const [loading, setLoading] = useState(true);
-    
+    const { carregarDadosFinanceiros } = useAuth();
+
     const { colorScheme } = useColorScheme();
     const cor = colorScheme == 'dark' ? '#FAFAFA' : '#000';
 
@@ -84,19 +84,15 @@ export function Futuro() {
     useEffect(() => {
         async function buscarEPreverTransacoes() {
             try {
-                const respostaContas = await listAccounts();
-                const contas = normalizeListResponse(respostaContas);
-
-                let todasTransacoes = [];
+                // Usa o cache do AuthContext (mesmos dados da Home/Transações) em vez de
+                // buscar tudo de novo na API a cada abertura da tela.
+                const dados = await carregarDadosFinanceiros();
                 const dataLimite = new Date();
                 dataLimite.setMonth(dataLimite.getMonth() - 3);
-                const stringDataFrom = dataLimite.toISOString().split('T')[0];
-
-                for (const conta of contas) {
-                    const respostaTx = await getAccountTransactions(conta.id, { dateFrom: stringDataFrom });
-                    const transacoesConta = normalizeTransactionsResponse(respostaTx);
-                    todasTransacoes = [...todasTransacoes, ...transacoesConta];
-                }
+                const todasTransacoes = (dados?.todasTransacoes || []).filter(t => {
+                    const d = new Date(t.data || t.date || t.createdAt);
+                    return !isNaN(d.getTime()) && d >= dataLimite;
+                });
 
                 const gruposDescricao = {};
                 todasTransacoes.forEach(t => {
