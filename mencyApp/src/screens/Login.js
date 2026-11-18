@@ -88,26 +88,31 @@ export function Login(){
               source={require("../../assets/images/logoAmarela.png")}
               className="w-[40%] mt-[-50%]"
               resizeMode="contain"
+              accessibilityLabel="Logo do Mency"
             />
             <Text className="font-popSemibold text-[22px] text-preto dark:text-branco mt-[-70%] mb-[10%]">
               Login
             </Text>
 
             <View className='w-[350px] mt-[5%] items-center'>
-              <Input texto={'Email'} value={email} onChangeText={(text) => setEmail(text.toLowerCase())} keyboardType="email-address" />
-              <Input texto={'Senha'} seguranca={true} onChangeText={setSenha} value={senha} />
+              <Input texto={'Email'} value={email} onChangeText={(text) => setEmail(text.toLowerCase())} keyboardType="email-address" autoCapitalize="none" autoComplete="email" textContentType="emailAddress" />
+              <Input texto={'Senha'} seguranca={true} onChangeText={setSenha} value={senha} autoComplete="current-password" textContentType="password" />
             </View>
 
-            <View className='w-[95%]'>
-              <Text className="font-popLight text-[12px] text-preto dark:text-branco mt-[-5%] mb-[10%]"
-                onPress={() => navigation.navigate('EsqueciSenha')}>
-                Esqueci minha senha
-              </Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('EsqueciSenha')}
+              accessibilityRole="link"
+              className="py-3 self-start"
+            >
+              <Text className="font-popLight text-[12px] text-preto dark:text-branco">Esqueci minha senha</Text>
+            </TouchableOpacity>
 
             <TouchableOpacity
               className="px-16 bg-amarelo w-[70%] rounded-[15px] items-center justify-center mt-2 py-2"
               onPress={handleLogin} activeOpacity={0.8} disabled={isLoading}
+              accessibilityRole="button"
+              accessibilityState={{ disabled: isLoading, busy: isLoading }}
+              accessibilityLabel={isLoading ? "Entrando" : "Entrar"}
             >
               {isLoading ? (
                 <ActivityIndicator size="small" color="#FAFAFA" />
@@ -124,13 +129,17 @@ export function Login(){
 
             <TouchableOpacity 
               className='flex-row justify-center border bg-transparent rounded-xl gap-2 p-1 mt-[10%] border-preto dark:border-branco'
+              accessibilityRole="button"
+              accessibilityLabel="Entrar com o Google"
+              accessibilityState={{ disabled: true }} 
             >
               <GoogleLogoIcon weight="regular" size={25} color={cor} />
               <Text className='font-popRegular text-[18px] text-preto dark:text-branco'>Acesse pelo Google</Text>
             </TouchableOpacity>
 
-            <Text className='font-popLight text-[13px] mt-[15%] text-preto dark:text-branco' onPress={() => navigation.navigate('Cadastro')}>
-              Faça o cadastro clicando <Text className='text-amarelo' onPress={() => navigation.navigate('Cadastro')}>aqui</Text>
+            <Text className='font-popLight text-[13px] mt-[15%] text-preto dark:text-branco' onPress={() => navigation.navigate('Cadastro')}
+            accessibilityRole="link" accessibilityLabel="Não tem conta? Ir para o cadastro">
+              Faça o cadastro clicando <Text className='text-amarelo'>aqui</Text>
             </Text>
           </ScrollView>
         </KeyboardAvoidingView>

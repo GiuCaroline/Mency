@@ -72,11 +72,12 @@ export function MonthHeader({ month, year, setMonth, setYear }) {
 
   return (
     <View style={styles.container} className="flex-row justify-between items-center bg-input dark:bg-input-dark rounded-full px-3 w-[80%]">
-      <TouchableOpacity onPress={handlePrev}>
+      <TouchableOpacity onPress={handlePrev} accessibilityRole="button" accessibilityLabel="Mês anterior" hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
         <CaretLeft size={24} color={cor} />
       </TouchableOpacity>
 
       <Animated.Text 
+        accessibilityLiveRegion="polite" 
         style={{
           transform: [{ translateX: slideAnim }],
           opacity: opacityAnim
@@ -86,7 +87,7 @@ export function MonthHeader({ month, year, setMonth, setYear }) {
         {months[month]}
       </Animated.Text>
 
-      <TouchableOpacity onPress={handleNext}>
+      <TouchableOpacity onPress={handleNext} accessibilityRole="button" accessibilityLabel="Próximo mês" hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
         <CaretRight size={24} color={cor}/>
       </TouchableOpacity>
     </View>

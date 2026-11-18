@@ -25,6 +25,8 @@ export function Notificacao() {
         setIsOpen(!isOpen);
     };
 
+    const qtdNaoLidas = notificacoes.filter(n => !n.lida).length;
+
     return (
         <View className="relative z-50">
             <TouchableOpacity 
@@ -32,6 +34,11 @@ export function Notificacao() {
                 style={[styles.sombra]}
                 activeOpacity={0.8}
                 onPress={toggleNotificacao}
+                accessibilityRole="button"
+                accessibilityLabel={
+                    qtdNaoLidas > 0 ? `Notificações, ${qtdNaoLidas} não lidas` : "Notificações"
+                }
+                accessibilityState={{ expanded: isOpen }}
             >
                 <BellIcon size={26} color={cor} />
                 
@@ -55,7 +62,7 @@ export function Notificacao() {
 
                     <ScrollView className="max-h-[200px]" showsVerticalScrollIndicator={false}>
                         {notificacoes.map((item) => (
-                            <View key={item.id} className="mb-3 border-b border-gray-200 pb-2 flex-row justify-between items-center">
+                            <View key={item.id} accessible accessibilityLabel={`${item.lida ? '' : 'Não lida. '}${item.titulo}. ${item.msg}`} className="mb-3 border-b border-gray-200 pb-2 flex-row justify-between items-center">
                                 <View className='flex-col flex-1 pr-2'>
                                     <Text 
                                         className={`text-[14px] text-preto dark:text-branco ${

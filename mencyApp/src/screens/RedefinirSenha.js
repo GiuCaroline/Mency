@@ -60,7 +60,7 @@ export function RedefinirSenha(){
           </Text>
 
           <View className='w-[350px] mt-[5%] items-center'>
-            <Input texto={'Nova Senha'} value={senha} onChangeText={setSenha} seguranca={true} />
+            <Input texto={'Nova Senha'} value={senha} onChangeText={setSenha} seguranca={true} autoComplete="new-password" textContentType="newPassword" />
           </View>
 
           <TouchableOpacity
@@ -68,6 +68,8 @@ export function RedefinirSenha(){
             activeOpacity={0.8} 
             onPress={handleSalvar}
             disabled={loading}
+            accessibilityRole="button"
+            accessibilityState={{ disabled: loading, busy: loading }}
           >
             {loading ? (
                <ActivityIndicator color="#ffffff" />

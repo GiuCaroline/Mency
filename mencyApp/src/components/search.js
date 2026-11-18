@@ -49,6 +49,9 @@ export function Search({ onSearch, placeholder = "Pesquisar..." }) {
                     className="p-2"
                     activeOpacity={0.8}
                     onPress={toggleSearch}
+                    accessibilityRole="button"
+                    accessibilityLabel={isExpanded ? "Fechar pesquisa" : "Abrir pesquisa"}
+                    accessibilityState={{ expanded: isExpanded }}
                 >
                     <MagnifyingGlassIcon size={26} color={cor} />
                 </TouchableOpacity>
@@ -58,6 +61,7 @@ export function Search({ onSearch, placeholder = "Pesquisar..." }) {
                         <TextInput
                             className="flex-1 h-full text-preto dark:text-branco p-2 justify-center font-popRegular"
                             placeholder={placeholder}
+                            accessibilityLabel={placeholder} 
                             placeholderTextColor="#888"
                             autoFocus
                             value={text}
@@ -66,7 +70,7 @@ export function Search({ onSearch, placeholder = "Pesquisar..." }) {
                                 if (onSearch) onSearch(val);
                             }}
                         />
-                        <TouchableOpacity onPress={toggleSearch} className="p-4">
+                        <TouchableOpacity onPress={toggleSearch} className="p-4" accessibilityRole="button" accessibilityLabel="Limpar e fechar pesquisa">
                             <X size={20} color={cor} />
                         </TouchableOpacity>
                     </>

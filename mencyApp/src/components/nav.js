@@ -16,13 +16,13 @@ export function Nav({ titulo, onSearch, placeholder }){
     <View className='mt-[10%] px-[2%] justify-between flex-row items-center relative z-10 mb-[3%]'>
       <View className='flex-col'>
         {titulo ? (
-          <Text className='font-popMedium text-[22px] text-preto dark:text-branco'>
+          <Text accessibilityRole="header" className='font-popMedium text-[22px] text-preto dark:text-branco'>
             {titulo}
           </Text>
         ) : (
           <>
-            <Text className='font-popRegular text-[20px] text-preto dark:text-branco'>Olá,</Text>
-            <Text className='font-popMedium text-[22px] mt-[-7%] text-preto dark:text-branco'>
+            <Text accessibilityRole="header" className='font-popRegular text-[20px] text-preto dark:text-branco'>Olá,</Text>
+            <Text accessibilityRole="header" className='font-popMedium text-[22px] mt-[-7%] text-preto dark:text-branco'>
               {formataNome(usuario?.name)}!
             </Text>
           </>

@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
-export function DayCell({ day, onPress, markers = [], isSelected }) {
+export function DayCell({ day, onPress, markers = [], isSelected, label }) {
 
   if (!day) {
     return <View className="w-[14.28%] h-[60px]" />;
@@ -12,6 +12,9 @@ export function DayCell({ day, onPress, markers = [], isSelected }) {
         ${isSelected ? "bg-amarelo/20" : ""}
       `}
       onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={{ selected: isSelected }}
     >
       <Text className="text-[14px] font-popLight text-preto dark:text-branco">
         {day}

@@ -611,9 +611,9 @@ export function Assistente() {
               })}
             >
               {enviando ? (
-                <ActivityIndicator size="small" color="#FFFFFF" />
+                <ActivityIndicator size="small" color={cores.texto} />
               ) : (
-                <PaperPlaneTilt size={21} color="#FFFFFF" weight="fill" />
+                <PaperPlaneTilt size={21} color={cores.texto} weight="fill" />
               )}
             </Pressable>
           </View>

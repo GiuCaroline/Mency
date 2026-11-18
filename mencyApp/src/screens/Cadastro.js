@@ -111,7 +111,7 @@ export function Cadastro(){
                         />
 
                         {cpfErro ? (
-                          <Text className="text-vermelho text-[12px] w-full mt-[-8%] mb-[4%]">
+                          <Text accessibilityRole="alert" accessibilityLiveRegion="polite" className="text-vermelho text-[12px] w-full mt-[-8%] mb-[4%]">
                             {cpfErro}
                           </Text>
                         ) : null}
@@ -138,7 +138,7 @@ export function Cadastro(){
                         />
 
                         {emailErro ? (
-                          <Text className="text-vermelho text-[12px] w-full mt-[-8%] mb-[4%]">
+                          <Text accessibilityRole="alert" accessibilityLiveRegion="polite" className="text-vermelho text-[12px] w-full mt-[-8%] mb-[4%]">
                             {emailErro}
                           </Text>
                         ) : null}
@@ -149,10 +149,15 @@ export function Cadastro(){
                                 seguranca={!mostrarSenha}
                                 onChangeText={setSenha}
                                 value={senha}
+                                autoComplete="new-password" 
+                                textContentType="newPassword"
                             />
                             <TouchableOpacity 
                                 className="absolute right-5 top-[40px] z-10" 
                                 onPress={() => setMostrarSenha(!mostrarSenha)}
+                                accessibilityRole="button"
+                                accessibilityLabel={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                             >
                                 {mostrarSenha ? (
                                     <Eye size={24} color={cor} />
@@ -168,6 +173,9 @@ export function Cadastro(){
                         onPress={handleCadastro}
                         activeOpacity={0.8}
                         disabled={isLoading}
+                        accessibilityRole="button"
+                        accessibilityState={{ disabled: isLoading, busy: isLoading }}
+                        accessibilityLabel={isLoading ? "Cadastrando" : "Cadastrar"}
                     >
                         {isLoading ? (
                           <ActivityIndicator size="small" color="#FAFAFA" />
@@ -178,8 +186,9 @@ export function Cadastro(){
                         )}
                     </TouchableOpacity>
                     
-                    <Text className='font-popLight text-[13px] mt-[10%] text-preto dark:text-branco' onPress={() => navigation.navigate('Login')}>
-                        Faça o login clicando <Text className='text-amarelo' onPress={() => navigation.navigate('Login')}>aqui</Text>
+                    <Text className='font-popLight text-[13px] mt-[10%] text-preto dark:text-branco' onPress={() => navigation.navigate('Login')}
+                      accessibilityRole="link" accessibilityLabel="Já tem conta? Voltar para o login">
+                        Faça o login clicando <Text className='text-amarelo'>aqui</Text>
                     </Text>
                 </ScrollView>
             </KeyboardAvoidingView>

@@ -60,7 +60,7 @@ export function CustomCalendar({
         className='flex-row items-center mb-[3%] ml-[5%]'
         style={{ opacity: opacityAnim, transform: [{ translateX: slideAnim }] }}
       >
-        <Text className='font-popRegular text-preto dark:text-branco text-base'>
+        <Text accessibilityRole="header" className='font-popRegular text-preto dark:text-branco text-base'>
           {monthsName[month]} {year}
         </Text>
       </Animated.View>
@@ -99,6 +99,7 @@ export function CustomCalendar({
                 isSelected={selected === dateKey}
                 onPress={() => onSelectDay(dateKey)}
                 markers={markers}
+                label={`${day} de ${monthsName[month]} de ${year}${ markers.length ? `, ${markers.length} ${markers.length === 1 ? 'pagamento' : 'pagamentos'}` : ''}`}
               />
             );
           })}

@@ -24,6 +24,7 @@ export function Comeco({ navigation }) {
         source={require('../../assets/images/logoBranco.png')}
         className="w-[40%]"
         resizeMode="contain"
+        accessibilityLabel="Mency" 
       />
 
     </View>

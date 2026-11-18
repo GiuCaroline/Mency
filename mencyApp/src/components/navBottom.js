@@ -17,7 +17,7 @@ export function NavBottom({ active, onChange }) {
  const altura = 88 + insets.bottom;
 
  return (
-  <View
+  <View  accessibilityRole="tablist"
    style={{
     position: "absolute",
     bottom: 0,
@@ -59,6 +59,7 @@ export function NavBottom({ active, onChange }) {
    >
     <Tab
      label="Home"
+     accessibilityLabel="Home"
      active={active === "Home"}
      onPress={() => onChange("Home")}
      icon={House}
@@ -67,6 +68,7 @@ export function NavBottom({ active, onChange }) {
 
     <Tab
      label="Transações"
+     accessibilityLabel="Transação"
      active={active === "Transacao"}
      onPress={() => onChange("Transacao")}
      icon={WalletIcon}
@@ -78,6 +80,7 @@ export function NavBottom({ active, onChange }) {
 
     <Tab
      label="Pag. futuros"
+     accessibilityLabel="Pagamentos futuros"
      active={active === "Futuro"}
      onPress={() => onChange("Futuro")}
      icon={ClockCountdownIcon}
@@ -86,6 +89,7 @@ export function NavBottom({ active, onChange }) {
 
     <Tab
      label="Perfil"
+     accessibilityLabel="Perfil"
      active={active === "Perfil"}
      onPress={() => onChange("Perfil")}
      icon={User}
@@ -95,6 +99,8 @@ export function NavBottom({ active, onChange }) {
 
    <Pressable
     onPress={() => onChange("Assistente")}
+    accessibilityRole="button"
+    accessibilityLabel="Abrir assistente Mency"
     style={{
       position: "absolute",
       top: -15,
@@ -118,14 +124,18 @@ export function NavBottom({ active, onChange }) {
  );
 }
 
-function Tab({ label, icon: Icon, active, onPress, cor }) {
+function Tab({ label, accessibilityLabel, icon: Icon, active, onPress, cor }) {
  return (
   <Pressable
    onPress={onPress}
+    accessibilityRole="tab"
+    accessibilityLabel={accessibilityLabel || label}
+    accessibilityState={{ selected: active }}
    style={{
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    minHeight: 48
    }}
   >
    <Icon
@@ -135,6 +145,7 @@ function Tab({ label, icon: Icon, active, onPress, cor }) {
    />
 
    <Text
+   maxFontSizeMultiplier={1.2} 
     style={{
      color: active ? "#C19200" : cor,
      fontSize: 11,

@@ -6,13 +6,14 @@ export function Input({
   value = '',
   onChangeText,
   keyboardType = 'default',
+  ...rest 
 }) {
 
   return (
     <View
       className="w-full mb-[10%]"
     >
-      <Text className='text-left font-popRegular text-preto dark:text-branco text-[15px]'>{texto}</Text>
+      <Text className='text-left font-popRegular text-preto dark:text-branco text-[15px]' accessibilityElementsHidden importantForAccessibility="no">{texto}</Text>
       
       <TextInput
         className={`px-[3%] w-full text-[16px] text-preto dark:text-branco bg-input dark:bg-input-dark rounded-xl flex items-center justify-center h-[50px] ${!seguranca ? 'font-popRegular' : ''}`}
@@ -21,6 +22,8 @@ export function Input({
         onChangeText={onChangeText}
         secureTextEntry={seguranca}
         keyboardType={keyboardType}
+        accessibilityLabel={texto}
+        {...rest}
       />
     </View>
   );

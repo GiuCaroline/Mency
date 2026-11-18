@@ -53,6 +53,8 @@ export function EsqueciSenha(){
             activeOpacity={0.8} 
             onPress={handleEnviar}
             disabled={loading}
+            accessibilityRole="button"
+            accessibilityState={{ disabled: loading, busy: loading }}
           >
             {loading ? (
                <ActivityIndicator color="#ffffff" />
@@ -61,7 +63,8 @@ export function EsqueciSenha(){
             )}
           </TouchableOpacity>
 
-          <Text className='font-popLight text-[13px] mt-[15%] text-preto dark:text-branco' onPress={() => navigation.navigate('Login')}>
+          <Text className='font-popLight text-[13px] mt-[15%] text-preto dark:text-branco' accessibilityRole="link" accessibilityLabel="Voltar para o login"
+           onPress={() => navigation.navigate('Login')}>
             Faça o login clicando <Text className='text-amarelo'>aqui</Text>
           </Text>
         </ScrollView>

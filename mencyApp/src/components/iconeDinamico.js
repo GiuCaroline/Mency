@@ -31,7 +31,7 @@ export function IconeDinamico({ nome, tamanho = 27, cor = "#000" }) {
     : PhosphorIcons.CreditCard;
 
   return (
-    <View>
+    <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
       <IconeComponente weight={fillCorreto} size={tamanho} color={cor} />
     </View>
   );

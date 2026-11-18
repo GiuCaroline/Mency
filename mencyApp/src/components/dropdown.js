@@ -41,7 +41,9 @@ export function DropdownMeses({ onMesSelecionado, mesesDisponiveis = [] }) {
     <View>
       <TouchableOpacity
         onPress={() => setAberto(true)}
-        className="flex-row items-center justify-end gap-1"
+        className="flex-row items-center justify-end gap-1 min-h-[44px]"
+        accessibilityRole="button"
+        accessibilityLabel={`Filtrar por mês. Selecionado: ${selecionado.label}`}
       >
         <Text className="text-[#9C9999] font-popRegular text-[14px]">
           {selecionado.label}
@@ -58,9 +60,12 @@ export function DropdownMeses({ onMesSelecionado, mesesDisponiveis = [] }) {
         <TouchableOpacity
           className="flex-1 justify-center items-center bg-black/20"
           activeOpacity={1}
+          accessible={false}
           onPress={() => setAberto(false)}
         >
-          <View 
+          <View
+            accessibilityViewIsModal
+            onAccessibilityEscape={() => setAberto(false)}
             className="bg-[#FAFAFA] dark:bg-preto-dark w-[200px] rounded-[15px] max-h-[300px] shadow-lg"
             style={{ elevation: 5, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84 }}
           >
@@ -72,6 +77,8 @@ export function DropdownMeses({ onMesSelecionado, mesesDisponiveis = [] }) {
                 <TouchableOpacity
                   className="p-4 border-b border-gray-200/50"
                   onPress={() => handleSelecionar(item)}
+                  accessibilityRole="button"
+                  accessibilityState={{ selected: selecionado.value === item.value }}
                 >
                   <Text 
                     className={`text-center font-popRegular text-[14px] ${
