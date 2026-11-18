@@ -10,6 +10,7 @@ import { LogBox } from 'react-native';
 
 import { AuthProvider } from './src/context/AuthContext';
 import { navigationRef } from './src/navigation/navigationRef';
+import { useReduceMotion } from './src/utils/useReduceMotion';
 
 LogBox.ignoreLogs(['Non-serializable values']);
 
@@ -56,13 +57,15 @@ const linking = {
 };
 
 function AppContent() {
+  const reduceMotion = useReduceMotion();
+
   return (
     <NavigationContainer ref={navigationRef} linking={linking}>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
-          animation: "fade",
-          animationDuration: 1000,
+          animation: reduceMotion ? 'none' : 'fade',
+          animationDuration: reduceMotion ? 0 : 400,
         }}
       >
         <Stack.Screen name="Splash" component={Comeco} />

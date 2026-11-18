@@ -66,6 +66,9 @@ export function Perfil(){
                     className='items-center bg-input dark:bg-input-dark rounded-[20px] p-4 mt-[5%] flex-row justify-between'
                     style={styles.sombra}
                     onPress={toggleColorScheme}
+                    accessibilityRole="switch"
+                    accessibilityLabel="Tema escuro"
+                    accessibilityState={{ checked: colorScheme === "dark" }}
                 >
                     <Text className='font-popRegular text-[16px] text-preto dark:text-branco'>Tema do App</Text>
                     {colorScheme === "dark" ? (
@@ -79,6 +82,7 @@ export function Perfil(){
                     className='items-center bg-input dark:bg-input-dark rounded-[20px] p-4 mt-[5%] flex-row justify-between'
                     style={styles.sombra}
                     onPress={handleLogout}
+                    accessibilityRole="button"
                 >
                     <Text className='font-popRegular text-preto dark:text-branco text-[16px]'>Sair da Conta</Text>
                     <SignOutIcon size={30} color="#C19200"/>
@@ -87,6 +91,8 @@ export function Perfil(){
                 <TouchableOpacity
                     className='items-center bg-transparent border-amarelo border rounded-[20px] p-4 mt-[5%] flex-row justify-between'
                     onPress={handleDeleteAccount}
+                    accessibilityRole="button"
+                    accessibilityHint="Abre uma confirmação antes de apagar todos os seus dados"
                 >
                     <Text className='font-popRegular text-amarelo text-[16px]'>Excluir Conta</Text>
                     <TrashSimpleIcon size={25} color="#C19200"/>

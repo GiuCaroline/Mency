@@ -297,6 +297,10 @@ export function Futuro() {
                                 <View
                                     key={`${event.id}-${index}`}
                                     style={[styles.sombra]}
+                                    accessible
+                                    accessibilityLabel={`${event.nome}, R$ ${formataDinheiro(event.valor)}, ${formataData(event.dataProg)}, ${
+                                        dias === 0 ? 'vence hoje' : dias > 0 ? `vence em ${dias} dias` : 'vencido'
+                                    }`}
                                     className='bg-input dark:bg-input-dark flex-row items-center justify-between py-4 px-5 mt-[3%] w-[95%] rounded-[20px]'
                                 >
                                     <View className='flex-row items-center w-full'> 
@@ -342,7 +346,7 @@ export function Futuro() {
                             );
                         })
                     ) : (
-                        <Text className="text-center text-cinza mt-[10%] font-popLight">
+                        <Text className="text-center text-[#666666] dark:text-[#9C9999] mt-[10%] font-popLight">
                             Nenhum pagamento encontrado
                         </Text>
                     )}

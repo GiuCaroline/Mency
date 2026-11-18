@@ -280,13 +280,16 @@ export function Home() {
             >
               <View className="z-20">
                 <Text className="text-preto dark:text-branco font-popRegular text-[14px]">Saldo atual</Text>
-                <Text className="mt-[-3%] text-preto dark:text-branco font-popRegular text-[22px]">
+                <Text accessibilityLabel={mostrarValor ? undefined : "Saldo oculto"} className="mt-[-3%] text-preto dark:text-branco font-popRegular text-[22px]">
                   R$ {mostrarValor ? formataDinheiro(totalSaldo) : '••••••'}
                 </Text>
               </View>
               <TouchableOpacity
                 className='bg-branco dark:bg-preto-dark rounded-full p-2'
                 onPress={() => setMostrarValor(!mostrarValor)}
+                accessibilityRole="button"
+                accessibilityLabel={mostrarValor ? "Ocultar saldo" : "Mostrar saldo"}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
                 {mostrarValor ? <Eye size={24} color={cor} /> : <EyeSlash size={24} color={cor} />}
               </TouchableOpacity>
@@ -296,7 +299,7 @@ export function Home() {
           {/* Pagamentos futuros */}
           <View className='flex-row justify-between items-center w-full mt-[8%]'>
             <Text className='font-popMedium text-[18px] text-preto dark:text-branco'>Pagamentos futuros</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Futuro')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Futuro')} accessibilityRole="link" accessibilityLabel="Ver todos os pagamentos futuros">
               <Text className='font-popRegular text-[14px] text-[#9C9999]'>Ver tudo</Text>
             </TouchableOpacity>
           </View>
@@ -308,7 +311,14 @@ export function Home() {
                   const corItem = dias <= 4 ? coresPadroes[Math.max(0, dias)] : cor;
                   const corItemIcon = dias <= 4 ? coresPadroes[Math.max(0, dias)] : '#000';
                   return (
-                    <View key={pag.id} className='flex-col bg-input dark:bg-input-dark p-4 w-[45%] py-6 rounded-[20px]' style={styles.sombra}>
+                    <View
+                      key={pag.id} 
+                      accessible
+                      accessibilityLabel={`${pag.nome}, R$ ${formataDinheiro(pag.valor)} por mês, ${
+                        dias === 0 ? 'vence hoje' : dias > 0 ? `vence em ${dias} dias` : 'vencido'
+                      }`}
+                      className='flex-col bg-input dark:bg-input-dark p-4 w-[45%] py-6 rounded-[20px]' style={styles.sombra}
+                    >
                       <View className='bg-branco rounded-full p-2 items-center w-[40px]'>
                         <IconeDinamico nome={pag.nome} cor={corItemIcon} />
                       </View>
@@ -348,7 +358,12 @@ export function Home() {
 
             {dadosGastoMes.length > 0 ? (
               <View className="flex-row items-center justify-between mt-2">
-                <View className="relative justify-center items-center w-[180px] h-[180px]">
+                <View
+                  accessible
+                  accessibilityRole="image"
+                  accessibilityLabel={`Gráfico de gastos por categoria. Total gasto: R$ ${formataDinheiro(totalGasto)}. Detalhes na lista ao lado.`}
+                  className="relative justify-center items-center w-[180px] h-[180px]"
+                >
                   <Svg width="180" height="180" viewBox="0 0 180 180">
                     {fatiasGrafico.map((fatia) => (
                       <FatiaAnimada
@@ -372,6 +387,10 @@ export function Home() {
                     <TouchableOpacity
                       key={item.id}
                       onPress={() => setCategoriaElevada(categoriaElevada === item.id ? null : item.id)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${item.categoria}, R$ ${formataDinheiro(item.valor)}, ${Math.round(item.porcentagem)} por cento do total`}
+                      accessibilityHint="Destaca esta categoria no gráfico"
+                      accessibilityState={{ selected: categoriaElevada === item.id }}
                       className="flex-row items-start justify-between"
                       activeOpacity={0.7}
                     >
@@ -450,7 +469,13 @@ export function Home() {
               <Text className="text-[#9C9999] font-popRegular text-[13px]">Últimos 6 meses</Text>
             </View>
 
-            <View className='w-full items-center justify-center'>
+            <View 
+              accessible
+              accessibilityRole="image"
+              accessibilityLabel={`Frequência de resultados negativos nos últimos 6 meses: ${pontosGraficoLinha
+                .map(p => `${p.mes} ${p.valor} por cento`).join(', ')}`}
+              className='w-full items-center justify-center'
+            >
               <Svg width="330" height="120" viewBox="0 0 330 120">
                 <Line x1={offsetLinhaX} y1={offsetLinhaY} x2={offsetLinhaX} y2={offsetLinhaY + alturaLinha} stroke="#D1D5DB" strokeWidth="1" />
                 <Line x1={offsetLinhaX} y1={offsetLinhaY + alturaLinha} x2={offsetLinhaX + larguraLinha + 10} y2={offsetLinhaY + alturaLinha} stroke="#D1D5DB" strokeWidth="1" />

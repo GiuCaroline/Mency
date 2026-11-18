@@ -34,6 +34,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "../context/AuthContext";
 import ai, { LIMITE_MENSAGEM } from "../api/ai";
 import pluggy from "../api/pluggy";
+import { AccessibilityInfo } from "react-native"; 
 
 const sugestoes = [
   {
@@ -187,6 +188,7 @@ export function Assistente() {
         ...atual,
         { id: novoId(), role: "assistant", content: String(resposta ?? "") },
       ]);
+      AccessibilityInfo.announceForAccessibility("Nova resposta do assistente");
     } catch (error) {
       // Desfaz a mensagem otimista e devolve o texto para o campo, para tentar de novo.
       setMensagens((atual) => atual.filter((m) => m.id !== idUsuario));
@@ -285,10 +287,11 @@ export function Assistente() {
           </View>
 
           <View style={{ flex: 1 }}>
-            <Text style={{ fontFamily: "Poppins_500Medium", fontSize: 21, color: cores.texto }}>
+            <Text accessibilityRole="header" style={{ fontFamily: "Poppins_500Medium", fontSize: 21, color: cores.texto }}>
               Assistente Mency
             </Text>
             <Text
+              accessibilityLiveRegion="polite"
               style={{
                 fontFamily: "Poppins_400Regular",
                 fontSize: 12,
@@ -302,6 +305,7 @@ export function Assistente() {
 
           {mensagens.length > 0 && (
             <Pressable
+              accessibilityRole="button"
               onPress={confirmarLimpeza}
               disabled={enviando}
               hitSlop={10}
@@ -391,6 +395,9 @@ export function Assistente() {
                     <Pressable
                       key={titulo}
                       onPress={() => selecionarSugestao(pergunta)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${titulo}. ${descricao}`}
+                      accessibilityHint="Preenche o campo de mensagem com esta pergunta"
                       style={({ pressed }) => ({
                         width: "48%",
                         minHeight: 115,
@@ -562,6 +569,7 @@ export function Assistente() {
           <TextInput
             value={mensagem}
             onChangeText={setMensagem}
+            accessibilityLabel="Mensagem para o assistente"
             placeholder="Pergunte algo sobre suas finanças..."
             placeholderTextColor={dark ? "#888888" : "#A0A0A0"}
             multiline
@@ -599,7 +607,9 @@ export function Assistente() {
             <Pressable
               onPress={enviarMensagem}
               disabled={!podeEnviar}
+              accessibilityRole="button"
               accessibilityLabel="Enviar mensagem"
+              accessibilityState={{ disabled: !podeEnviar, busy: enviando }}
               style={({ pressed }) => ({
                 width: 42,
                 height: 42,
@@ -668,6 +678,8 @@ function CartaoConectarBanco({ cores, onPress }) {
       </Text>
       <Pressable
         onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel="Conectar banco"
         style={({ pressed }) => ({
           backgroundColor: cores.destaque,
           borderRadius: 13,

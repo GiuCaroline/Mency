@@ -2,10 +2,12 @@ import React, { useState, useRef } from "react";
 import { View, TouchableOpacity, TextInput, Animated, StyleSheet, Dimensions } from "react-native";
 import { MagnifyingGlassIcon, X } from "phosphor-react-native";
 import { useColorScheme } from "nativewind";
+import { useReduceMotion } from '../utils/useReduceMotion';
 
 const { width } = Dimensions.get("window");
 
 export function Search({ onSearch, placeholder = "Pesquisar..." }) {
+    const reduce = useReduceMotion(); 
     const [isExpanded, setIsExpanded] = useState(false);
     const [text, setText] = useState("");
     const widthAnim = useRef(new Animated.Value(42)).current;
@@ -17,7 +19,7 @@ export function Search({ onSearch, placeholder = "Pesquisar..." }) {
         if (isExpanded) {
             Animated.timing(widthAnim, {
                 toValue: 42,
-                duration: 1000,
+                duration: reduce ? 0 : 300, 
                 useNativeDriver: false,
             }).start(() => setIsExpanded(false));
             setText("");
@@ -26,7 +28,7 @@ export function Search({ onSearch, placeholder = "Pesquisar..." }) {
             setIsExpanded(true);
             Animated.timing(widthAnim, {
                 toValue: width * 0.8,
-                duration: 1000,
+                duration: reduce ? 0 : 300, 
                 useNativeDriver: false,
             }).start();
         }

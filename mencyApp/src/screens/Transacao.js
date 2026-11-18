@@ -116,13 +116,16 @@ export function Transacao() {
                                 <Text className="text-preto dark:text-branco font-popRegular text-[14px]">
                                     Saldo atual
                                 </Text>
-                                <Text className="mt-[-3%] text-preto dark:text-branco font-popRegular text-[22px]">
+                                <Text accessibilityLabel={mostrarValor ? undefined : "Saldo oculto"} className="mt-[-3%] text-preto dark:text-branco font-popRegular text-[22px]">
                                     R$ {mostrarValor ? formataDinheiro(saldoAtual) : '••••••'}
                                 </Text>
                             </View>
                             <TouchableOpacity
                                 className='bg-branco dark:bg-preto-dark rounded-full p-2'
                                 onPress={() => setMostrarValor(!mostrarValor)}
+                                accessibilityRole="button"
+                                accessibilityLabel={mostrarValor ? "Ocultar saldo" : "Mostrar saldo"}
+                                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                             >
                                 {mostrarValor ? (
                                     <Eye size={24} color={cor} />
@@ -144,7 +147,12 @@ export function Transacao() {
                                             <IconeDinamico nome={item.nome} tamanho={30} />
                                         </View>
                                         <View className='flex-col ml-[3%] flex-1'>
-                                            <TouchableOpacity onPress={() => toggleNome(item.id)}>
+                                            <TouchableOpacity 
+                                                onPress={() => toggleNome(item.id)}
+                                                accessibilityRole="button"
+                                                accessibilityHint="Toque para mostrar o nome completo"
+                                                accessibilityState={{ expanded: nomesExpandidos.includes(item.id) }}
+                                            >
                                                 <Text className='font-popRegular text-preto dark:text-branco text-[16px] flex-wrap'>
                                                     {nomesExpandidos.includes(item.id) ? item.nome : formataNome(item.nome)}
                                                 </Text>
@@ -152,7 +160,10 @@ export function Transacao() {
                                             <Text className='font-popRegular text-preto dark:text-branco text-[14px]'>{formataData(item.dataProg)}</Text>
                                         </View>
                                     </View>
-                                    <Text className={`font-popRegular text-[16px] ${item.tipo === 'entrada' ? 'text-[#006A1D]' : 'text-[#A4000D]'}`}>
+                                    <Text
+                                        className={`font-popRegular text-[16px] ${item.tipo === 'entrada' ? 'text-[#006A1D]' : 'text-[#A4000D]'}`}
+                                        accessibilityLabel={`${item.tipo === 'entrada' ? 'Entrada' : 'Saída'} de ${formataDinheiro(item.valor)} reais`}
+                                    >
                                         {item.tipo === 'entrada' ? '+' : '-'}R$ {formataDinheiro(item.valor)}
                                     </Text>
                                 </View>
@@ -175,6 +186,9 @@ export function Transacao() {
                                     setCarregandoMais(false);
                                 }, 400); 
                             }}
+                            accessibilityRole="button"
+                            accessibilityLabel={carregandoMais ? "Carregando mais transações" : "Ver mais transações"}
+                            accessibilityState={{ disabled: carregandoMais, busy: carregandoMais }}
                         >
                             {carregandoMais ? (
                                 <ActivityIndicator size="small" color="#C19200" />
