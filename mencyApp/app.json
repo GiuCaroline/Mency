@@ -2,6 +2,7 @@
   "expo": {
     "name": "Mency",
     "slug": "mencyApp",
+    "owner": "giucaroline",
     "scheme": "mency",
     "ios": {
       "bundleIdentifier": "com.mency.ios"
@@ -10,7 +11,7 @@
       "package": "com.mency.android"
     },
     "version": "1.0.0",
-    "orientation": "portrait", 
+    "orientation": "portrait",
     "icon": "./assets/capaApp.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -29,7 +30,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "1eb34ef0-3cec-46f3-a133-4bdc21931b6c"
+        "projectId": "2aba378b-10ba-44ea-91e1-2f0a2b83c196"
       }
     }
   }
