@@ -17,7 +17,7 @@
     "splash": {
       "image": "./assets/logoCapaArl.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#C19200"
     },
     "web": {
       "favicon": "./assets/logoCapaArl.png"
